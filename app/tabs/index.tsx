@@ -3,8 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { useAuth } from '@/hooks/useUserRole';
+import { auth } from '@/lib/firebase';
+import { THEME } from '@/lib/theme';
 import { Link, Stack } from 'expo-router';
-import { MoonStarIcon, StarIcon, SunIcon } from 'lucide-react-native';
+import { signOut } from 'firebase/auth';
+import { ChevronRight, CircleAlert, Clock, FileText, MoonStarIcon, StarIcon, SunIcon, Wallet } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
 import { Image, type ImageStyle, Pressable, TextInput, View } from 'react-native';
@@ -30,6 +33,16 @@ export default function Screen() {
 
   const { user } = useAuth();
 
+  const handleLogout = async () => {
+    signOut(auth)
+      .then(()=>{
+        console.log("User Logged Out");
+      })
+      .catch((err)=>{
+        console.error(err.message);
+      })
+  }
+
   if(user === null){
     return (
       <>
@@ -40,8 +53,68 @@ export default function Screen() {
 
   return (
     <>
-      <View className='flex-1 bg-red-500'>
-        <Text className='text-yellow-500 text-xl'>Hello</Text>
+      <View className='flex-1 p-3 gap-2'>
+        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+          <View className='flex flex-row items-center gap-2'>
+            <FileText 
+              size={40}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+            <Text className='font-medium text-lg'>My Tickets</Text>
+          </View>
+          <ChevronRight 
+            size={20}
+            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+          />
+        </View>
+
+        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+          <View className='flex flex-row items-center gap-2'>
+            <Wallet 
+              size={40}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+            <Text className='font-medium text-lg'>Pay Fines</Text>
+          </View>
+          <ChevronRight 
+            size={20}
+            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+          />
+        </View>
+
+        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+          <View className='flex flex-row items-center gap-2'>
+            <Clock 
+              size={40}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+            <Text className='font-medium text-lg'>History</Text>
+          </View>
+          <ChevronRight 
+            size={20}
+            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+          />
+        </View>
+
+        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+          <View className='flex flex-row items-center gap-2'>
+            <CircleAlert 
+              size={40}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+            <Text className='font-medium text-lg'>Policies</Text>
+          </View>
+          <ChevronRight 
+            size={20}
+            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+          />
+        </View>
+
+        <Pressable className='flex flex-row' onPress={handleLogout}>
+          <View className='bg-gray-500 p-2'>
+            <Text>Log out</Text>
+          </View>
+        </Pressable>
       </View>
     </>
   );

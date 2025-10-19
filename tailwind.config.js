@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        ytheme: 'hsl(var(--ytheme))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
   return(
     <>
-      <View className='flex-1 justify-center items-center bg-foreground'>
+      <View className='flex-1 justify-center items-center bg-background'>
         <Animated.View
         className="flex-row w-full"
         style={animatedStyle}
