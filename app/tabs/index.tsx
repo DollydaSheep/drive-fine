@@ -10,7 +10,7 @@ import { signOut } from 'firebase/auth';
 import { ChevronRight, CircleAlert, Clock, FileText, MoonStarIcon, StarIcon, SunIcon, Wallet } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
-import { Image, type ImageStyle, Pressable, TextInput, View } from 'react-native';
+import { Image, type ImageStyle, Pressable, ScrollView, TextInput, View } from 'react-native';
 
 const LOGO = {
   light: require('@/assets/images/react-native-reusables-light.png'),
@@ -53,69 +53,129 @@ export default function Screen() {
 
   return (
     <>
-      <View className='flex-1 p-3 gap-2'>
-        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-          <View className='flex flex-row items-center gap-2'>
-            <FileText 
-              size={40}
-              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-            />
-            <Text className='font-medium text-lg'>My Tickets</Text>
+      <View className='py-3 bg-ytheme rounded-b-4xl'>
+        <View className='px-3'>
+          <View className='bg-background p-4 rounded-lg'>
+            <Text className='text-foreground font-semibold'>Total Fines</Text>
+            <Text className='font-bold text-4xl text-ytheme'>₱2,000</Text>
+            <View className='flex flex-row justify-between'>
+              <View className='flex flex-row items-center gap-1'>
+                <CircleAlert 
+                  size={16}
+                  color={"rgb(249 115 22)"}
+                />
+                <Text className='text-orange-500 text-sm'>Payment due</Text>
+              </View>
+              <View className='flex flex-row items-center gap-1'>
+                <View className='p-1 bg-ytheme rounded-full' />
+                <Text className='text-ytheme text-xs font-medium'>1 Unpaid Ticket</Text>
+              </View>
+            </View>
           </View>
-          <ChevronRight 
-            size={20}
-            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-          />
         </View>
-
-        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-          <View className='flex flex-row items-center gap-2'>
-            <Wallet 
-              size={40}
-              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-            />
-            <Text className='font-medium text-lg'>Pay Fines</Text>
-          </View>
-          <ChevronRight 
-            size={20}
-            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-          />
-        </View>
-
-        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-          <View className='flex flex-row items-center gap-2'>
-            <Clock 
-              size={40}
-              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-            />
-            <Text className='font-medium text-lg'>History</Text>
-          </View>
-          <ChevronRight 
-            size={20}
-            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-          />
-        </View>
-
-        <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-          <View className='flex flex-row items-center gap-2'>
-            <CircleAlert 
-              size={40}
-              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-            />
-            <Text className='font-medium text-lg'>Policies</Text>
-          </View>
-          <ChevronRight 
-            size={20}
-            color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-          />
-        </View>
-
-        <Pressable className='flex flex-row' onPress={handleLogout}>
-          <View className='bg-gray-500 p-2'>
-            <Text>Log out</Text>
-          </View>
-        </Pressable>
       </View>
+
+      <ScrollView>
+
+        <View className='flex-1 p-3 gap-2'>
+
+          <Text className='text-lg font-medium text-foreground'>Quick Actions</Text>
+
+          <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+            <View className='flex flex-row items-center gap-2'>
+              <FileText 
+                size={40}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text className='font-medium text-lg'>My Tickets</Text>
+            </View>
+            <ChevronRight 
+              size={20}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+          </View>
+
+          <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+            <View className='flex flex-row items-center gap-2'>
+              <Wallet 
+                size={40}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text className='font-medium text-lg'>Pay Fines</Text>
+            </View>
+            <ChevronRight 
+              size={20}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+          </View>
+
+          <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+            <View className='flex flex-row items-center gap-2'>
+              <Clock 
+                size={40}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text className='font-medium text-lg'>History</Text>
+            </View>
+            <ChevronRight 
+              size={20}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+          </View>
+
+          <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
+            <View className='flex flex-row items-center gap-2'>
+              <CircleAlert 
+                size={40}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text className='font-medium text-lg'>Policies</Text>
+            </View>
+            <ChevronRight 
+              size={20}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+            />
+          </View>
+
+          <Text className='text-lg font-medium text-foreground'>Recent Tickets</Text>
+
+          <View className='py-3 px-4 rounded-lg border border-ytheme'>
+            <View className='flex flex-row justify-between items-center'>
+              <Text className='text-foreground font-medium'>Illegal Parking</Text>
+              <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>Pending</Text>
+            </View>
+            <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
+            <View className='flex flex-row justify-between mt-2'>
+              <Text className='text-lg font-semibold text-foreground'>₱2,000.00</Text>
+              <ChevronRight 
+                size={20}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+            </View>
+          </View>
+
+          <View className='py-3 px-4 rounded-lg border border-ytheme'>
+            <View className='flex flex-row justify-between items-center'>
+              <Text className='text-foreground font-medium'>No Seatbelt</Text>
+              <Text className='text-xs font-medium text-foreground/50 bg-green-500/20 px-3 py-1 rounded-full'>Paid</Text>
+            </View>
+            <Text className='font-light text-sm text-foreground'>2025-09-15</Text>
+            <View className='flex flex-row justify-between mt-2'>
+              <Text className='text-lg font-semibold text-foreground'>₱200.00</Text>
+              <ChevronRight 
+                size={20}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+            </View>
+          </View>
+
+          <Pressable className='flex flex-row' onPress={handleLogout}>
+            <View className='bg-gray-500 p-2'>
+              <Text>Log out</Text>
+            </View>
+          </Pressable>
+        </View>
+      </ScrollView>
     </>
   );
 }
