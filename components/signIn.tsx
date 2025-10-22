@@ -16,7 +16,6 @@ export default function SignInComponent({ onSwitch }: { onSwitch: () => void}){
       Alert.alert("Error", "Please enter both email and password.");
       return;
     }
-    console.log(userID, password)
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, userID, password);

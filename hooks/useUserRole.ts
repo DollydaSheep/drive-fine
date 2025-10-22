@@ -8,8 +8,17 @@ export function useAuth() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if(!currentUser){
+        console.log("🚪 User logged out");
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      // const { creationTime, lastSignInTime} = currentUser.metadata
+      console.log("Sign In")
       setUser(currentUser);
       setLoading(false);
+      console.log(currentUser?.metadata) 
     });
 
     return () => unsubscribe();
