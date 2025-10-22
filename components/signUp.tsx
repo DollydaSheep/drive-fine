@@ -1,10 +1,11 @@
-import { Alert, Image, type ImageStyle, Pressable, TextInput, View } from 'react-native';
+import { Alert, Image, type ImageStyle, Platform, Pressable, TextInput, View } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
 
@@ -55,6 +56,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
 
   return(
     <>
+      <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 10}>
       <ScrollView>
       <View className='flex flex-col items-center gap-2 w-full p-4 rounded-lg'>
         <Text className='text-2xl font-semibold text-foreground'>Create Account</Text>
@@ -145,6 +147,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
         </Pressable>
       </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </>
   )
 }

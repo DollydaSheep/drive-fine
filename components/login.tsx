@@ -4,6 +4,7 @@ import SignInComponent from './signIn';
 import { useState } from 'react';
 import SignUpComponent from './signUp';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 const { width } = Dimensions.get('window');
 
@@ -34,6 +35,7 @@ export default function LoginScreen() {
 
   return(
     <>
+      <KeyboardProvider>
       <View className='flex-1 justify-center items-center bg-background'>
         <Animated.View
         className="flex-row w-full"
@@ -51,6 +53,7 @@ export default function LoginScreen() {
 
       </Animated.View>
       </View>
+      </KeyboardProvider>
     </>
   )
 }
