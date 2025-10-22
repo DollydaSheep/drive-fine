@@ -10,7 +10,8 @@ import { useColorScheme } from 'nativewind';
 import { auth } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useUserRole';
 import { Text } from '@/components/ui/text';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
+import HeaderComponent from '@/components/header';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -48,19 +49,7 @@ export default function RootLayout() {
             title: "DriveFine",
             header: () => (
             <>
-              <View className='flex flex-row pt-8 p-3 items-center gap-2 bg-ytheme'>
-                <View className='p-2 bg-background dark:bg-foreground rounded-lg'>
-                  <Image
-                    source={require('@/assets/images/logoP.png')}
-                    resizeMethod='resize'
-                    style={{
-                      width: 25,
-                      height: 30
-                    }}
-                  />
-                </View>
-                <Text className='font-medium text-xl text-foreground'>DriveFine</Text>
-              </View>
+              <HeaderComponent />
             </>),
             headerTransparent: false,
             headerStyle: {backgroundColor: colorScheme === 'dark' ? THEME.dark.background : THEME.light.background},
