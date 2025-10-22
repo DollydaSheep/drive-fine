@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/text';
 import { useAuth } from '@/hooks/useUserRole';
 import { auth } from '@/lib/firebase';
 import { THEME } from '@/lib/theme';
-import { Link, Stack } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import { navigate } from 'expo-router/build/global-state/routing';
 import { signOut } from 'firebase/auth';
 import { ChevronRight, CircleAlert, Clock, FileText, MoonStarIcon, StarIcon, SunIcon, Wallet } from 'lucide-react-native';
@@ -61,7 +61,7 @@ export default function Screen() {
 
           <Text className='text-lg font-medium text-foreground'>Quick Actions</Text>
           
-          <Pressable className='w-full' onPress={()=>navigate('/tabs/tickets')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <FileText 
@@ -77,7 +77,7 @@ export default function Screen() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/tabs/tickets')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <Wallet 
@@ -93,7 +93,7 @@ export default function Screen() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/tabs/history')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/history')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <Clock 
@@ -109,7 +109,7 @@ export default function Screen() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/tabs/about')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/about')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <CircleAlert 
@@ -127,20 +127,25 @@ export default function Screen() {
 
           <Text className='text-lg font-medium text-foreground'>Recent Tickets</Text>
 
-          <View className='py-3 px-4 rounded-lg border border-ytheme'>
-            <View className='flex flex-row justify-between items-center'>
-              <Text className='text-foreground font-medium'>Illegal Parking</Text>
-              <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>Pending</Text>
+          <Pressable onPress={()=>{router.push({
+            pathname: '/(tabs)/tickets/[id]',
+            params: { id: 1 }
+          })}}>
+            <View className='py-3 px-4 rounded-lg border border-ytheme'>
+              <View className='flex flex-row justify-between items-center'>
+                <Text className='text-foreground font-medium'>Illegal Parking</Text>
+                <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>Pending</Text>
+              </View>
+              <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
+              <View className='flex flex-row justify-between mt-2'>
+                <Text className='text-lg font-semibold text-foreground'>₱2,000.00</Text>
+                <ChevronRight 
+                  size={20}
+                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+                />
+              </View>
             </View>
-            <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
-            <View className='flex flex-row justify-between mt-2'>
-              <Text className='text-lg font-semibold text-foreground'>₱2,000.00</Text>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </View>
+          </Pressable>
 
           <View className='py-3 px-4 rounded-lg border border-ytheme'>
             <View className='flex flex-row justify-between items-center'>
