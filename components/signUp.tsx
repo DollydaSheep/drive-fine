@@ -5,9 +5,14 @@ import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useColorScheme } from 'nativewind';
+import { THEME } from '@/lib/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
+  const { colorScheme } = useColorScheme();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -16,6 +21,21 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const [driverLicense, setDriverLicense] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+
+  const [nextForm, setNextForm] = useState(false)
+
+  const [selectedRole, setSelectedRole] = useState("student");
+
+  const handleNext = () => {
+    console.log(firstName)
+    console.log(lastName)
+    console.log(email)
+    setNextForm(true)
+  }
+
+  const handleBack = () => {
+    setNextForm(false);
+  }
 
   const handleSignUp = async () => {
     if(!firstName || !lastName || !email || !phone || !driverLicense || !password){
@@ -56,13 +76,17 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
 
   return(
     <>
+      
       <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 10}>
+      <SafeAreaView>
       <ScrollView>
       <View className='flex flex-col items-center gap-2 w-full p-4 rounded-lg'>
         <Text className='text-2xl font-semibold text-foreground'>Create Account</Text>
         <Text className='text-foreground/50'>Join DriveFine today</Text>
 
-        <View className='flex flex-col w-full mb-1'>
+        {!nextForm && (
+          <>
+            <View className='flex flex-col w-full mb-1'>
           <Text className='text-foreground text-xs mb-1'>First Name</Text>
           <TextInput 
             className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
@@ -84,69 +108,109 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
 
         <View className='flex flex-col w-full mb-1'>
           <Text className='text-foreground text-xs mb-1'>Email Adress</Text>
-          <TextInput 
-            className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-            placeholder='email@email.com'
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
+            <TextInput 
+              className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+              placeholder='email@email.com'
+              value={email}
+              onChangeText={setEmail}
+            />
+          </View>
 
-        <View className='flex flex-col w-full mb-1'>
-          <Text className='text-foreground text-xs mb-1'>Phone Number</Text>
-          <TextInput 
-            className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-            placeholder='e.g. 0944 455 5464'
-            value={phone}
-            onChangeText={setPhone}
-          />
-        </View>
+          <View className='flex flex-col w-full mb-1'>
+            <Text className='text-foreground text-xs mb-1'>Password</Text>
+            <TextInput 
+              className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+              placeholder='Create a password'
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
 
-        <View className='flex flex-col w-full mb-1'>
-          <Text className='text-foreground text-xs mb-1'>Driver's License Number</Text>
-          <TextInput 
-            className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-            placeholder='N01-23-456789'
-            value={driverLicense}
-            onChangeText={setDriverLicense}
-          />
-        </View>
+          <View className='flex flex-col w-full mb-2'>
+            <Text className='text-foreground text-xs mb-1'>Confirm Password</Text>
+            <TextInput 
+              className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+              placeholder='Re-enter your password'
+              value={confirm}
+              onChangeText={setConfirm}
+            />
+          </View>
+          </>
+        )}
 
-        <View className='flex flex-col w-full mb-1'>
-          <Text className='text-foreground text-xs mb-1'>Password</Text>
-          <TextInput 
-            className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-            placeholder='Create a password'
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
+        {nextForm && (
+          <>
+            
+            <View className="flex flex-col w-full mb-1">
+              <Text className="text-sm font-medium">Select Role</Text>
+              <View className="bg-foreground/5 rounded-lg">
+                <Picker
+                  enabled={true}
+                  style={{
+                    color: colorScheme === "dark" ? THEME.dark.foreground : THEME.light.foreground,
+                    marginLeft: 8,
+                  }}
+                  dropdownIconColor={colorScheme === "dark" ? THEME.dark.foreground : THEME.light.foreground}
+                  selectedValue={selectedRole}
+                  onValueChange={(itemValue, itemIndex)=>
+                    setSelectedRole(itemValue)
+                  }
+                >
+                  <Picker.Item label="Student" value="student" />
+                  <Picker.Item label="Instructor" value="instructor" />
+                </Picker>
+              </View>
+            </View>
+            
 
-        <View className='flex flex-col w-full mb-2'>
-          <Text className='text-foreground text-xs mb-1'>Confirm Password</Text>
-          <TextInput 
-            className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-            placeholder='Re-enter your password'
-            value={confirm}
-            onChangeText={setConfirm}
-          />
-        </View>
+            <View className='flex flex-col w-full mb-1'>
+              <Text className='text-foreground text-xs mb-1'>Phone Number</Text>
+              <TextInput 
+                className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+                placeholder='e.g. 0944 455 5464'
+                value={phone}
+                onChangeText={setPhone}
+              />
+            </View>
 
-        <Pressable className='w-full' onPress={handleSignUp}>
+            <View className='flex flex-col w-full mb-1'>
+              <Text className='text-foreground text-xs mb-1'>Driver's License Number</Text>
+              <TextInput 
+                className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+                placeholder='N01-23-456789'
+                value={driverLicense}
+                onChangeText={setDriverLicense}
+              />
+            </View>
+          </>
+        )}
+
+        <Pressable className='w-full' onPress={handleNext}>
           <View className='flex items-center py-3 bg-ytheme rounded-lg'>
             <Text className='text-foreground font-semibold'>Next</Text>
           </View>
         </Pressable>
 
+        {nextForm && (
+          <>
+            <Pressable className='w-full' onPress={handleBack}>
+              <View className='flex items-center py-3 bg-ytheme rounded-lg'>
+                <Text className='text-foreground font-semibold'>Back</Text>
+              </View>
+            </Pressable>
+          </>
+        )}
+
         <View className='border-t border-foreground/5 w-full'></View>
         <Text className='text-foreground text-sm'>Already have an account?</Text>
         <Pressable className='w-full' onPress={onSwitch}>
-          <View className='flex items-center py-3 bg-ytheme rounded-lg'>
+          <View className='flex items-center py-3 bg-ytheme rounded-lg mb-6'>
             <Text className='text-foreground font-semibold'>Sign in</Text>
           </View>
         </Pressable>
       </View>
       </ScrollView>
+      </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   )

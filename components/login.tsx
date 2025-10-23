@@ -1,4 +1,4 @@
-import { Dimensions, Image, type ImageStyle, Pressable, TextInput, View } from 'react-native';
+import { Dimensions, Image, type ImageStyle, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { Text } from '@/components/ui/text';
 import SignInComponent from './signIn';
 import { useState } from 'react';

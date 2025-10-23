@@ -2,7 +2,7 @@ import '@/global.css';
 import { NAV_THEME, THEME } from '@/lib/theme';
 import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
-import { Tabs } from 'expo-router';
+import { Stack, Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { CircleAlert, Clock, FileText, House } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
@@ -15,7 +15,20 @@ export default function TabsLayout() {
   const { colorScheme } = useColorScheme();
   const { user } = useAuth();
 
-  if (!user) return null;
+  if(user === null){
+    return(
+      <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
+        <Stack>
+          <Stack.Screen 
+            name='index'
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </ThemeProvider>
+    )
+  }
 
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
