@@ -128,7 +128,7 @@ export default function Screen() {
           <Text className='text-lg font-medium text-foreground'>Recent Tickets</Text>
 
           <Pressable onPress={()=>{router.push({
-            pathname: '/(tabs)/tickets/[id]',
+            pathname: '/(tickets)/[id]',
             params: { id: 1 }
           })}}>
             <View className='py-3 px-4 rounded-lg border border-ytheme'>

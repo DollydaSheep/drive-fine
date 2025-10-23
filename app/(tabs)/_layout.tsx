@@ -49,6 +49,7 @@ export default function TabsLayout() {
             ),
             tabBarLabel: 'Tickets',
             tabBarIcon: ({ color }) => <FileText color={color} className="size-6" />,
+            tabBarBadge: 3
           }}
         />
 

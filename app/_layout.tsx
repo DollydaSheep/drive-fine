@@ -6,6 +6,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'nativewind';
 import { useAuth } from '@/hooks/useUserRole';
+import { Text } from '@/components/ui/text';
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
@@ -14,16 +15,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />        {/* tabs layout */}
-        <Stack.Screen
-          name="tickets/tickets/[id]"
-          options={{
-            headerShown: true,
-            title: 'Ticket Details',
-            presentation: 'card', // or 'modal'
-          }}
-        />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>        {/* tabs layout */}
+        
       </Stack>
       <PortalHost />
     </ThemeProvider>
