@@ -24,7 +24,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
 
   const [nextForm, setNextForm] = useState(false)
 
-  const [selectedRole, setSelectedRole] = useState("student");
+  const [selectedRole, setSelectedRole] = useState("user");
 
   const handleNext = () => {
     console.log(firstName)
@@ -78,7 +78,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
     <>
       
       <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 10}>
-      <SafeAreaView>
+      
       <ScrollView>
       <View className='flex flex-col items-center gap-2 w-full p-4 rounded-lg'>
         <Text className='text-2xl font-semibold text-foreground'>Create Account</Text>
@@ -142,23 +142,18 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
           <>
             
             <View className="flex flex-col w-full mb-1">
-              <Text className="text-sm font-medium">Select Role</Text>
-              <View className="bg-foreground/5 rounded-lg">
-                <Picker
-                  enabled={true}
-                  style={{
-                    color: colorScheme === "dark" ? THEME.dark.foreground : THEME.light.foreground,
-                    marginLeft: 8,
-                  }}
-                  dropdownIconColor={colorScheme === "dark" ? THEME.dark.foreground : THEME.light.foreground}
-                  selectedValue={selectedRole}
-                  onValueChange={(itemValue, itemIndex)=>
-                    setSelectedRole(itemValue)
-                  }
-                >
-                  <Picker.Item label="Student" value="student" />
-                  <Picker.Item label="Instructor" value="instructor" />
-                </Picker>
+              <Text className='text-foreground text-xs mb-1'>Role</Text>
+              <View className='flex flex-row gap-2'>
+                <Pressable className='flex-1' onPress={()=>setSelectedRole('user')}>
+                  <View className={`flex flex-row justify-center ${selectedRole === 'user' ? 'bg-ytheme' : 'bg-background'} border border-ytheme px-1 py-2 rounded-lg`}>
+                    <Text className={`${selectedRole === 'user' ? 'text-background' : 'text-foreground'} font-medium`}>User</Text>
+                  </View>
+                </Pressable>
+                <Pressable className='flex-1' onPress={()=>setSelectedRole('enforcer')}>
+                  <View className={`flex flex-row justify-center ${selectedRole === 'enforcer' ? 'bg-ytheme' : 'bg-background'} border border-ytheme px-1 py-2 rounded-lg`}>
+                    <Text className={`${selectedRole === 'enforcer' ? 'text-background' : 'text-foreground'} font-medium`}>Enforcer</Text>
+                  </View>
+                </Pressable>
               </View>
             </View>
             
@@ -210,7 +205,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
         </Pressable>
       </View>
       </ScrollView>
-      </SafeAreaView>
+      
       </KeyboardAvoidingView>
     </>
   )
