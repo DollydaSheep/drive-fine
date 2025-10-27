@@ -4,7 +4,7 @@ import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { Stack, Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { CircleAlert, Clock, FileText, House } from 'lucide-react-native';
+import { CircleAlert, Clock, FileText, House, Settings, User } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { useAuth } from '@/hooks/useUserRole';
 import { Text } from '@/components/ui/text';
@@ -67,29 +67,29 @@ export default function TabsLayout() {
         />
 
         <Tabs.Screen
-          name="history"
+          name="settings"
           options={{
-            title: 'History',
+            title: 'Settings',
             header: () => (
               <View className="flex flex-row pt-8 p-3 items-center gap-2 bg-ytheme">
-                <Text className="font-medium text-xl text-foreground">History</Text>
+                <Text className="font-medium text-xl text-foreground">Settings</Text>
               </View>
             ),
-            tabBarLabel: 'History',
-            tabBarIcon: ({ color }) => <Clock color={color} className="size-6" />,
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color }) => <Settings color={color} className="size-6" />,
           }}
         />
         <Tabs.Screen
-          name="about"
+          name="profile"
           options={{
-            title: 'About',
+            title: 'Profile',
             header: () => (
               <View className="flex flex-row pt-8 p-3 items-center gap-2 bg-ytheme">
-                <Text className="font-medium text-xl text-foreground">About</Text>
+                <Text className="font-medium text-xl text-foreground">Profile</Text>
               </View>
             ),
-            tabBarLabel: 'About',
-            tabBarIcon: ({ color }) => <CircleAlert color={color} className="size-6" />,
+            tabBarLabel: 'Profile',
+            tabBarIcon: ({ color }) => <User color={color} className="size-6" />,
           }}
         />
         <Tabs.Screen 

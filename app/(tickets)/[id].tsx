@@ -1,12 +1,60 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Text } from '@/components/ui/text';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { THEME } from '@/lib/theme';
+import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
+import { db } from '@/lib/firebase';
+import { Zap } from 'lucide-react-native';
+
+type Ticket = {
+  id: string;
+  violation: string;
+  status: string;
+  dateIssued: string;
+  fineAmount: number;
+  enforcerName: string;
+  userId: string;
+};
 
 export default function TicketDetails() {
 
   const { id } = useLocalSearchParams();
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTicket = async () => {
+      if (!id) return;
+
+      const ticketId = Array.isArray(id) ? id[0] : id;
+
+      try {
+        const docRef = doc(db, "tickets", ticketId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setTicket({ id: docSnap.id, ...docSnap.data() } as Ticket);
+        } else {
+          console.warn("No such ticket found!");
+        }
+      } catch (error) {
+        console.error("Error fetching ticket:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTicket();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Loading ticket...</Text>
+      </View>
+    )
+  }
 
   return (
     <>
@@ -16,7 +64,7 @@ export default function TicketDetails() {
           headerTitle: () => (
             <>
               <Text className='text-xl font-medium'>Ticket Details</Text>
-              <Text className='text-xs font-light'>Ticket #{id}</Text>
+              <Text className='text-xs font-light'>Ticket ID: {id}</Text>
             </>
           )
         }}
@@ -24,8 +72,8 @@ export default function TicketDetails() {
       <View className='p-4'>
         <View className='bg-background border border-ytheme p-4 rounded-xl gap-3' style={{boxShadow: "0 3px 4px rgba(0,0,0,0.1)"}}>
           <View className='flex flex-row justify-between items-center'>
-            <Text className='text-foreground text-lg font-semibold'>Illegal Parking</Text>
-            <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>Pending</Text>
+            <Text className='text-foreground text-lg font-semibold'>{ticket?.violation}</Text>
+            <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>{ticket?.status}</Text>
           </View>
 
           <View>
@@ -45,7 +93,7 @@ export default function TicketDetails() {
 
           <View>
             <Text className='font-extralight text-xs'>Fine Amount</Text>
-            <Text className='text-foreground font-semibold text-2xl'>₱2000.00</Text>
+            <Text className='text-foreground font-semibold text-2xl'>₱{ticket?.fineAmount}.00</Text>
           </View>
 
           <Pressable>

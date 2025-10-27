@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const { colorScheme } = useColorScheme();
 
+  
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -27,9 +29,10 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const [selectedRole, setSelectedRole] = useState("user");
 
   const handleNext = () => {
-    console.log(firstName)
-    console.log(lastName)
-    console.log(email)
+    if(nextForm){
+      handleSignUp();
+      return;
+    }
     setNextForm(true)
   }
 
@@ -53,8 +56,11 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
       await signOut(auth);
 
       await setDoc(doc(db, "Users", user.uid), {
+        id: user.uid,
         firstName,
         lastName,
+        email,
+        role: selectedRole,
         phone,
         driverLicense,
         createdAt: new Date()

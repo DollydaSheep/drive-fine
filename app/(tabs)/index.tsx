@@ -1,16 +1,20 @@
+import EnforcerDashboard from '@/components/enforcerDashboard';
 import LoginScreen from '@/components/login';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import UserDashboard from '@/components/userDashboard';
 import { useAuth } from '@/hooks/useUserRole';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { THEME } from '@/lib/theme';
 import { Link, router, Stack } from 'expo-router';
 import { navigate } from 'expo-router/build/global-state/routing';
 import { signOut } from 'firebase/auth';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { ChevronRight, CircleAlert, Clock, FileText, MoonStarIcon, StarIcon, SunIcon, Wallet } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Image, ImageBackground, type ImageStyle, Pressable, ScrollView, TextInput, View } from 'react-native';
 
 const LOGO = {
@@ -34,15 +38,35 @@ export default function Screen() {
 
   const { user } = useAuth();
 
-  const handleLogout = async () => {
-    signOut(auth)
-      .then(()=>{
-        console.log("User Logged Out");
-      })
-      .catch((err)=>{
-        console.error(err.message);
-      })
-  }
+  const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, "Users", user.uid);
+        const userSnap = await getDoc(userDocRef);
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          setRole(userData.role || null);
+        } else {
+          console.warn("User document not found");
+        }
+      } catch (err) {
+        console.error("Error fetching role:", err);
+      }
+
+      setLoading(false);
+    };
+
+    fetchUserRole();
+  }, [user]);
 
   if(user === null){
     return (
@@ -52,125 +76,19 @@ export default function Screen() {
     );
   }
 
+  if(role === 'user')
   return (
     <>
-
-      <ScrollView>
-
-        <View className='flex-1 p-3 gap-2'>
-
-          <Text className='text-lg font-medium text-foreground'>Quick Actions</Text>
-          
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
-            <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-              <View className='flex flex-row items-center gap-2'>
-                <FileText 
-                  size={40}
-                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-                />
-                <Text className='font-medium text-lg'>My Tickets</Text>
-              </View>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </Pressable>
-
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
-            <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-              <View className='flex flex-row items-center gap-2'>
-                <Wallet 
-                  size={40}
-                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-                />
-                <Text className='font-medium text-lg'>Pay Fines</Text>
-              </View>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </Pressable>
-
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/history')}>
-            <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-              <View className='flex flex-row items-center gap-2'>
-                <Clock 
-                  size={40}
-                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-                />
-                <Text className='font-medium text-lg'>History</Text>
-              </View>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </Pressable>
-
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/about')}>
-            <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
-              <View className='flex flex-row items-center gap-2'>
-                <CircleAlert 
-                  size={40}
-                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-                />
-                <Text className='font-medium text-lg'>Policies</Text>
-              </View>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </Pressable>
-
-          <Text className='text-lg font-medium text-foreground'>Recent Tickets</Text>
-
-          <Pressable onPress={()=>{router.push({
-            pathname: '/(tickets)/[id]',
-            params: { id: 1 }
-          })}}>
-            <View className='py-3 px-4 rounded-lg border border-ytheme'>
-              <View className='flex flex-row justify-between items-center'>
-                <Text className='text-foreground font-medium'>Illegal Parking</Text>
-                <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>Pending</Text>
-              </View>
-              <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
-              <View className='flex flex-row justify-between mt-2'>
-                <Text className='text-lg font-semibold text-foreground'>₱2,000.00</Text>
-                <ChevronRight 
-                  size={20}
-                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-                />
-              </View>
-            </View>
-          </Pressable>
-
-          <View className='py-3 px-4 rounded-lg border border-ytheme'>
-            <View className='flex flex-row justify-between items-center'>
-              <Text className='text-foreground font-medium'>No Seatbelt</Text>
-              <Text className='text-xs font-medium text-foreground/50 bg-green-500/20 px-3 py-1 rounded-full'>Paid</Text>
-            </View>
-            <Text className='font-light text-sm text-foreground'>2025-09-15</Text>
-            <View className='flex flex-row justify-between mt-2'>
-              <Text className='text-lg font-semibold text-foreground'>₱200.00</Text>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </View>
-
-          <Pressable className='flex flex-row' onPress={handleLogout}>
-            <View className='bg-gray-500 p-2'>
-              <Text>Log out</Text>
-            </View>
-          </Pressable>
-        </View>
-      </ScrollView>
+      <UserDashboard />
     </>
   );
+  if(role === 'enforcer'){
+    return(
+      <>
+        <EnforcerDashboard />
+      </>
+    )
+  }
 }
 
 const THEME_ICONS = {
