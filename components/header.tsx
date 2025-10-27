@@ -1,10 +1,11 @@
-import { Image, ImageBackground, View } from 'react-native';
+import { Image, ImageBackground, Pressable, View } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { CircleAlert, User } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useUserRole';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { navigate } from 'expo-router/build/global-state/routing';
 
 export default function HeaderComponent(){
 
@@ -68,11 +69,13 @@ export default function HeaderComponent(){
           }}
         />
       </View>
-      <View className='p-3 rounded-full bg-background'>
-        <User 
-          size={16}
-        />
-      </View>
+      <Pressable onPress={()=>navigate('/(tabs)/profile')}>
+        <View className='p-3 rounded-full bg-background'>
+          <User 
+            size={16}
+          />
+        </View>
+      </Pressable>
     </View>
     
     {role === 'user' && (

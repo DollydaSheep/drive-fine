@@ -52,7 +52,7 @@ export default function TabsLayout() {
         />
 
         <Tabs.Screen
-          name="tickets"
+          name="notifications"
           options={{
             title: 'Notifications',
             header: () => (

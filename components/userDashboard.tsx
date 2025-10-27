@@ -94,7 +94,7 @@ export default function UserDashboard() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/history')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tickets)/userHistory')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <Clock 
@@ -110,7 +110,7 @@ export default function UserDashboard() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/about')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(policies)/policies')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <CircleAlert 

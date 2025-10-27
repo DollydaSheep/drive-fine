@@ -8,7 +8,7 @@ export default function TicketsScreen(){
   return(
     <>
       <View className="flex-1 p-4">
-        <View className="flex flex-row p-4 border border-ytheme rounded-lg gap-2">
+        <View className="flex flex-row items-start p-4 border border-ytheme rounded-lg gap-2">
           <View className="p-2 bg-foreground/5 rounded-lg">
             <Bell />
           </View>
