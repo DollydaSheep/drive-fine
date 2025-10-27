@@ -4,7 +4,7 @@ import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { Stack, Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { CircleAlert, Clock, FileText, House, Settings, User } from 'lucide-react-native';
+import { Bell, CircleAlert, Clock, FileText, House, Settings, User } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { useAuth } from '@/hooks/useUserRole';
 import { Text } from '@/components/ui/text';
@@ -54,14 +54,14 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="tickets"
           options={{
-            title: 'Tickets',
+            title: 'Notifications',
             header: () => (
               <View className="flex flex-row pt-8 p-3 items-center gap-2 bg-ytheme">
-                <Text className="font-medium text-xl text-foreground">Tickets</Text>
+                <Text className="font-medium text-xl text-foreground">Notifications</Text>
               </View>
             ),
-            tabBarLabel: 'Tickets',
-            tabBarIcon: ({ color }) => <FileText color={color} className="size-6" />,
+            tabBarLabel: 'Notifications',
+            tabBarIcon: ({ color }) => <Bell color={color} className="size-6" />,
             tabBarBadge: 3
           }}
         />

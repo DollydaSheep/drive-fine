@@ -11,16 +11,6 @@ export default function EnforcerDashboard(){
 
 	const { colorScheme } = useColorScheme();
 
-	const handleLogout = async () => {
-			signOut(auth)
-				.then(()=>{
-					console.log("User Logged Out");
-				})
-				.catch((err)=>{
-					console.error(err.message);
-				})
-		}
-
 	return(
 		<>
 			<ScrollView>
@@ -28,7 +18,7 @@ export default function EnforcerDashboard(){
 				<View className='flex-1 p-3 gap-2'>
 					<Text className='text-lg font-medium text-foreground'>Quick Actions</Text>
 						
-					<Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
+					<Pressable className='w-full' onPress={()=>navigate('/(tabs)/profile')}>
 						<View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
 							<View className='flex flex-row items-center gap-2'>
 								<User 
@@ -110,12 +100,6 @@ export default function EnforcerDashboard(){
 					</View>
 
 				</View>
-
-				<Pressable className='flex flex-row' onPress={handleLogout}>
-					<View className='bg-gray-500 p-2'>
-						<Text>Log out</Text>
-					</View>
-				</Pressable>
 
 			</ScrollView>
 		</>

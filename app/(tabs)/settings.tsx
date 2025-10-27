@@ -1,9 +1,22 @@
 import { Text } from "@/components/ui/text";
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
 import { FileWarning, Flag, Languages, Lock, LogOut, Moon } from "lucide-react-native";
-import { ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 
 
 export default function HistoryScreen(){
+
+  const handleLogout = async () => {
+        signOut(auth)
+          .then(()=>{
+            console.log("User Logged Out");
+          })
+          .catch((err)=>{
+            console.error(err.message);
+          })
+      }
+
   return(
     <>
       <ScrollView>
@@ -43,12 +56,14 @@ export default function HistoryScreen(){
             <Text>Security</Text>
           </View>
 
-          <View className="flex flex-row items-center gap-2 p-3 bg-red-500 rounded-lg">
-            <LogOut 
-              size={24}
-            />
-            <Text>Logout</Text>
-          </View>
+          <Pressable onPress={handleLogout}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-red-500 rounded-lg">
+              <LogOut 
+                size={24}
+              />
+              <Text>Logout</Text>
+            </View>
+          </Pressable>
         </View>
       </ScrollView>
     </>
