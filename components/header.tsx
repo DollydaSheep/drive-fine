@@ -26,6 +26,7 @@ export default function HeaderComponent(){
 
         if (userSnap.exists()) {
           const userData = userSnap.data();
+          console.log(userData.role)
           setRole(userData.role || null);
         } else {
           console.warn("User document not found");
@@ -74,7 +75,7 @@ export default function HeaderComponent(){
       </View>
     </View>
     
-    {role === ' user' && (
+    {role === 'user' && (
       <>
         <View className='px-3 w-full'>
           <View className='bg-background p-4 rounded-lg'>

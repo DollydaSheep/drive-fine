@@ -62,7 +62,7 @@ export default function UserDashboard() {
 
           <Text className='text-lg font-medium text-foreground'>Quick Actions</Text>
           
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tickets)/userView')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <FileText 
@@ -78,7 +78,7 @@ export default function UserDashboard() {
             </View>
           </Pressable>
 
-          <Pressable className='w-full' onPress={()=>navigate('/(tabs)/tickets')}>
+          <Pressable className='w-full' onPress={()=>navigate('/(tickets)/payfines')}>
             <View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
               <View className='flex flex-row items-center gap-2'>
                 <Wallet 
@@ -190,11 +190,6 @@ export default function UserDashboard() {
             </View>
           </View>
 
-          <Pressable className='flex flex-row' onPress={handleLogout}>
-            <View className='bg-gray-500 p-2'>
-              <Text>Log out</Text>
-            </View>
-          </Pressable>
         </View>
       </ScrollView>
 		</>
