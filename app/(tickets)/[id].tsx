@@ -6,6 +6,7 @@ import { THEME } from '@/lib/theme';
 import { collection, query, where, getDocs, getDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from '@/lib/firebase';
 import { Zap } from 'lucide-react-native';
+import { useAuth } from '@/hooks/useUserRole';
 
 type Ticket = {
   id: string;
@@ -19,9 +20,39 @@ type Ticket = {
 
 export default function TicketDetails() {
 
+  const { user } = useAuth();
+
   const { id } = useLocalSearchParams();
   const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      const fetchUserRole = async () => {
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+  
+        try {
+          const userDocRef = doc(db, "Users", user.uid);
+          const userSnap = await getDoc(userDocRef);
+  
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setRole(userData.role || null);
+          } else {
+            console.warn("User document not found");
+          }
+        } catch (err) {
+          console.error("Error fetching role:", err);
+        }
+  
+        setLoading(false);
+      };
+  
+      fetchUserRole();
+    }, [user]);
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -86,10 +117,17 @@ export default function TicketDetails() {
             <Text className='text-foreground'>{ticket?.dateIssued.toDate().toISOString().split("T")[0]}</Text>
           </View>
 
-          <View>
-            <Text className='font-extralight text-xs'>Issued by</Text>
-            <Text className='text-foreground'>Enforcer Nabunturan</Text>
-          </View>
+          {role === "user" ? (
+            <View>
+              <Text className='font-extralight text-xs'>Issued by</Text>
+              <Text className='text-foreground'>Enforcer Nabunturan</Text>
+            </View>
+          ) : (
+            <View>
+              <Text className='font-extralight text-xs'>Issued to</Text>
+              <Text className='text-foreground'>Mel James</Text>
+            </View>
+          )}
 
           <View>
             <Text className='font-extralight text-xs'>Plate Number</Text>
@@ -101,7 +139,7 @@ export default function TicketDetails() {
             <Text className='text-foreground font-semibold text-2xl'>₱{ticket?.fineAmount}.00</Text>
           </View>
 
-          {ticket?.status !== "Paid" && (
+          {role === 'user' && ticket?.status !== "Paid" && (
             <Pressable>
               <View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl'>
                 <Text className='text-background font-semibold'>Pay Now</Text>
