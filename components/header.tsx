@@ -3,7 +3,7 @@ import { Text } from '@/components/ui/text';
 import { CircleAlert, User } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useUserRole';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { navigate } from 'expo-router/build/global-state/routing';
 
@@ -11,35 +11,29 @@ export default function HeaderComponent(){
 
   const { user } = useAuth();
 
+  const [profile,setProfile] = useState('');
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserRole = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+    if (!user) return;
 
-      try {
-        const userDocRef = doc(db, "Users", user.uid);
-        const userSnap = await getDoc(userDocRef);
+    const userDocRef = doc(db, "Users", user.uid);
 
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          console.log(userData.role)
-          setRole(userData.role || null);
-        } else {
-          console.warn("User document not found");
+    const unsubscribe = onSnapshot(userDocRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setRole(data.role || null);
+
+        if (data.profileImage) {
+          setProfile(`${data.profileImage}?t=${Date.now()}`); // cache-bust
         }
-      } catch (err) {
-        console.error("Error fetching role:", err);
+      } else {
+        console.warn("User document not found");
       }
+    });
 
-      setLoading(false);
-    };
-
-    fetchUserRole();
+    return () => unsubscribe();
   }, [user]);
 
   return(<>
@@ -70,10 +64,19 @@ export default function HeaderComponent(){
         />
       </View>
       <Pressable onPress={()=>navigate('/(tabs)/profile')}>
-        <View className='p-3 rounded-full bg-background'>
-          <User 
-            size={16}
-          />
+        <View className={`${profile ? 'p-0.5' : 'p-3'} rounded-full bg-background`}>
+          {!profile ? (
+                <User 
+                  size={16}
+                />
+              ): (
+                <Image 
+                  source={{ uri: profile}}
+                  width={35}
+                  height={35}
+                  className="rounded-full"
+                />
+              )}
         </View>
       </Pressable>
     </View>
