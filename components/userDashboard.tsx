@@ -141,9 +141,14 @@ export default function UserDashboard() {
                 <View className='py-3 px-4 rounded-lg border border-ytheme'>
                   <View className='flex flex-row justify-between items-center'>
                     <Text className='text-foreground font-medium'>{ticket.violation}</Text>
-                    <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>{ticket.status}</Text>
+                    <Text className={`text-xs font-medium text-foreground/50 px-3 py-1 rounded-full 
+                      ${ticket.status === 'Pending' ? 'bg-ytheme/50' : 
+                      ticket.status === 'Paid' ? 'bg-green-500/20' : 
+                      ''}  `}>
+                        {ticket.status}
+                      </Text>
                   </View>
-                  <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
+                  <Text className='font-light text-sm text-foreground'>{ticket.dateIssued.toDate().toISOString().split("T")[0]}</Text>
                   <View className='flex flex-row justify-between mt-2'>
                     <Text className='text-lg font-semibold text-foreground'>₱{ticket.fineAmount}.00</Text>
                     <ChevronRight 
@@ -174,21 +179,6 @@ export default function UserDashboard() {
               </View>
             </View>
           </Pressable> */}
-
-          <View className='py-3 px-4 rounded-lg border border-ytheme'>
-            <View className='flex flex-row justify-between items-center'>
-              <Text className='text-foreground font-medium'>No Seatbelt</Text>
-              <Text className='text-xs font-medium text-foreground/50 bg-green-500/20 px-3 py-1 rounded-full'>Paid</Text>
-            </View>
-            <Text className='font-light text-sm text-foreground'>2025-09-15</Text>
-            <View className='flex flex-row justify-between mt-2'>
-              <Text className='text-lg font-semibold text-foreground'>₱200.00</Text>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </View>
 
         </View>
       </ScrollView>
