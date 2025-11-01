@@ -3,7 +3,7 @@ import { Text } from '@/components/ui/text';
 import React, { useEffect, useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { THEME } from '@/lib/theme';
-import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from '@/lib/firebase';
 import { Zap } from 'lucide-react-native';
 
@@ -11,7 +11,7 @@ type Ticket = {
   id: string;
   violation: string;
   status: string;
-  dateIssued: string;
+  dateIssued: Timestamp;
   fineAmount: number;
   enforcerName: string;
   userId: string;
@@ -73,12 +73,17 @@ export default function TicketDetails() {
         <View className='bg-background border border-ytheme p-4 rounded-xl gap-3' style={{boxShadow: "0 3px 4px rgba(0,0,0,0.1)"}}>
           <View className='flex flex-row justify-between items-center'>
             <Text className='text-foreground text-lg font-semibold'>{ticket?.violation}</Text>
-            <Text className='text-xs font-medium text-foreground/50 bg-ytheme/50 px-3 py-1 rounded-full'>{ticket?.status}</Text>
+            <Text className={`text-xs font-medium text-foreground/50 px-3 py-1 rounded-full 
+              ${ticket?.status === 'Pending' ? 'bg-ytheme/50' : 
+              ticket?.status === 'Paid' ? 'bg-green-500/20' : 
+              ''}`}>
+                {ticket?.status}
+              </Text>
           </View>
 
           <View>
             <Text className='font-extralight text-xs'>Date Issued</Text>
-            <Text className='text-foreground'>2025-10-10</Text>
+            <Text className='text-foreground'>{ticket?.dateIssued.toDate().toISOString().split("T")[0]}</Text>
           </View>
 
           <View>
@@ -96,11 +101,13 @@ export default function TicketDetails() {
             <Text className='text-foreground font-semibold text-2xl'>₱{ticket?.fineAmount}.00</Text>
           </View>
 
-          <Pressable>
-            <View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl'>
-              <Text className='text-background font-semibold'>Pay Now</Text>
-            </View>
-          </Pressable>
+          {ticket?.status !== "Paid" && (
+            <Pressable>
+              <View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl'>
+                <Text className='text-background font-semibold'>Pay Now</Text>
+              </View>
+            </Pressable>
+          )}
         
         </View>
       </View>
