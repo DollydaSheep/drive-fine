@@ -38,20 +38,20 @@ export default function LoginScreen() {
       <KeyboardProvider>
       <View className='flex-1 justify-center items-center bg-background'>
         <Animated.View
-        className="flex-row w-full"
-        style={animatedStyle}
-      >
-        {/* Sign In Screen */}
-        <View style={{ width }}>
-          <SignInComponent onSwitch={() => handleOnSwitch('signup')} />
-        </View>
+          className="flex-row w-full"
+          style={animatedStyle}
+        >
+          {/* Sign In Screen */}
+          <View style={{ width }}>
+            <SignInComponent onSwitch={() => handleOnSwitch('signup')} />
+          </View>
 
-        {/* Sign Up Screen */}
-        <View style={{ width }}>
-          <SignUpComponent onSwitch={() => handleOnSwitch('signin')} />
-        </View>
+          {/* Sign Up Screen */}
+          <View style={{ width }}>
+            <SignUpComponent onSwitch={() => handleOnSwitch('signin')} />
+          </View>
 
-      </Animated.View>
+        </Animated.View>
       </View>
       </KeyboardProvider>
     </>
