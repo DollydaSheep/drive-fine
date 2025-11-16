@@ -13,6 +13,7 @@ import { decode } from 'base64-arraybuffer';
 import Skeletontext from "@/components/skeleton/skeletontext";
 import Skeletoncircle from "@/components/skeleton/skeletoncircle";
 import SkeletonProfile from "@/components/skeletonProfile";
+import { router } from "expo-router";
 
 export default function AboutScreen(){
   
@@ -138,9 +139,9 @@ export default function AboutScreen(){
                   />
                 )}
               </View>
-              <Pressable onPress={handleEditProfile}>
+              <Pressable onPress={()=>router.push('/editprofile')}>
                 <View className="py-2 px-3 bg-foreground/20 justify-self-center rounded-lg">
-                  <Text className="text-sm text-background">Edit Profile Picture</Text>
+                  <Text className="text-sm text-background">Edit Profile</Text>
                 </View>
               </Pressable>  
             </View>

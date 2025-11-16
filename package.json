@@ -35,6 +35,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
+    "react-native-date-picker": "^5.0.13",
     "react-native-keyboard-controller": "1.18.5",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
@@ -45,7 +46,8 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^3.4.14",
     "tailwindcss-animate": "^1.0.7",
-    "undefined": "\\"
+    "undefined": "\\",
+    "@react-native-community/datetimepicker": "8.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
