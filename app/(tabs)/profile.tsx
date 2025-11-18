@@ -14,6 +14,7 @@ import Skeletontext from "@/components/skeleton/skeletontext";
 import Skeletoncircle from "@/components/skeleton/skeletoncircle";
 import SkeletonProfile from "@/components/skeletonProfile";
 import { router } from "expo-router";
+import DateMonths from "@/lib/months";
 
 export default function AboutScreen(){
   
@@ -21,6 +22,7 @@ export default function AboutScreen(){
 
   const [profile, setProfile] = useState('');
   const [profileData, setProfileData] = useState<DocumentData>();
+  const [birthDate, setBirthDate] = useState<Date | null>(null)
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function AboutScreen(){
       if (snap.exists()) {
         const data = snap.data();
         console.log(data);
+        if(data.birthDate) setBirthDate(data.birthDate?.toDate());
         setProfileData(data);
 
         if (data.profileImage) {
@@ -188,7 +191,7 @@ export default function AboutScreen(){
                     color={THEME.light.border}
                   />
                 </View>
-                <Text className='text-foreground text-lg'>{profileData?.birthDate ? `${profileData.birthDate}` : '---'}</Text>
+                <Text className='text-foreground text-lg'>{profileData?.birthDate ? `${DateMonths[birthDate!.getMonth()]}-${birthDate!.getDate()}-${birthDate!.getFullYear()}` : '---'}</Text>
               </View>
 
               <View>
@@ -221,7 +224,7 @@ export default function AboutScreen(){
                     color={THEME.light.border}
                   />
                 </View>
-                <Text className='text-foreground text-lg'>{profileData?.plateNo ? `${profileData.plateNo}` : '---'}</Text>
+                <Text className='text-foreground text-lg'>{profileData?.plate ? `${profileData.plate}` : '---'}</Text>
               </View>
 
             </View>

@@ -10,7 +10,7 @@ import { db } from "@/lib/firebase";
 import * as FileSystem from "expo-file-system/legacy";
 import { decode } from 'base64-arraybuffer';
 import { supabase } from "@/lib/supabase";
-import { Calendar, Pencil, User } from "lucide-react-native";
+import { Calendar, Pencil, PlusCircle, User, XCircle } from "lucide-react-native";
 import DatePicker from 'react-native-date-picker'
 import SkeletonProfile from "@/components/skeletonProfile";
 import DateMonths from "@/lib/months";
@@ -35,10 +35,13 @@ export default function EditProfileScreen(){
   const [birthDate, setBirthDate] = useState<Date | null>(null);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [plate, setPlate] = useState('');
+  const [plate, setPlate] = useState<string[]>([]);
+  const [newPlate, setNewPlate] = useState('');
 
   const [openDatePicker, setOpenDatePicker] = useState(false);
   const [changesModal, setChangesModal] = useState(false);
+
+  const [deletePlateNo, setDeletePlateNo] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -54,7 +57,7 @@ export default function EditProfileScreen(){
         setFirstName(data.firstName ? data.firstName : '');
         setLastName(data.lastName ? data.lastName : '');
         setGender(data.gender ? data.gender : '');
-        setBirthDate(data.birthDate ? data.birthDate : null);
+        setBirthDate(data.birthDate ? data.birthDate.toDate() : null);
         setEmail(data.email ? data.email : '');
         setPhone(data.phone ? data.phone : '');
         setPlate(data.plate ? data.plate : '');
@@ -116,7 +119,7 @@ export default function EditProfileScreen(){
           lastName: lastName,
           gender: gender,
           email: email,
-          birthDate: birthDate,
+          birthDate,
           phone: phone,
           plate: plate,
           profileImage: cacheBustedUrl,
@@ -168,7 +171,14 @@ export default function EditProfileScreen(){
     const uploadState = await uploadProfileToSupabase();
     router.navigate('/profile')
   }
+
+  const handleDeletePlateNo = () => {
+    setDeletePlateNo(true);
+  }
     
+  const deletePlateFunction = (index: number) => {
+    setPlate(plate.filter((_, i) => i !== index));
+  };
 
   return(
 		<>
@@ -290,7 +300,7 @@ export default function EditProfileScreen(){
                     display="spinner"
                     onChange={(event, selectedDate) => {
                       setOpenDatePicker(false);
-                      if (selectedDate && event.type === 'set') setBirthDate(selectedDate);
+                      if (selectedDate && event.type === 'set') {setBirthDate(selectedDate);console.log(selectedDate)};
                     }}
                     
                   />
@@ -337,27 +347,74 @@ export default function EditProfileScreen(){
                 </View>
               </View>
 
-              <View>
+              <View className="mb-4">
                 <View className="flex flex-row justify-between mr-4">
                   <Text className='font-extralight text-sm'>Plate No.</Text>
                 </View>
+                {plate && plate.map((p,index)=>(
+                  <View key={index} className="mb-2">
+                    <View className="flex flex-row items-center">
+                      <Text>{p}</Text>
+                      <Pressable onPress={handleDeletePlateNo} className="absolute right-0 p-2">
+                        <View >
+                          <XCircle 
+                            size={28}
+                            color={"#da1f1fff"}
+                          />
+                        </View>
+                      </Pressable>
+                    </View>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={deletePlateNo}
+                    >
+                      <View className="flex-1 justify-center items-center bg-foreground/20 p-4">
+                        {loading && (
+                          <ActivityIndicator size={50} />
+                        )}
+                        {!loading && (
+                          <View className="p-4 rounded-lg bg-background border border-ytheme">
+                            <Text className="text-lg">Delete Plate No.</Text>
+                            <Text className="text-sm font-light">Are you sure you want to delete plate no.?</Text>
+                            <View className="flex flex-row justify-evenly my-4">
+                              <Pressable onPress={()=>setDeletePlateNo(false)} className="px-6 py-1 bg-foreground/20 rounded-lg">
+                                <Text className="text-background">Cancel</Text>
+                              </Pressable>
+                              <Pressable className="px-6 py-1 bg-ytheme rounded-lg">
+                                <Text onPress={()=>deletePlateFunction(index)} className="text-background">Submit</Text>
+                              </Pressable>
+                            </View>
+                          </View>
+                        )}
+                      </View>
+                    </Modal>
+                  </View>
+                ))}
                 <View className="flex flex-row items-center">
                   <TextInput 
                     className="border-b border-foreground/20 w-full"
                     placeholder="---"
-                    value={plate}
-                    onChangeText={setPlate}
+                    value={newPlate}
+                    onChangeText={setNewPlate}
                   />
-                  <View className="absolute right-0">
-                    <Pencil 
-                      size={20}
-                      color={THEME.light.border}
-                    />
-                  </View>
+                  <Pressable className="bg-background p-2 absolute right-0" onPress={()=>{
+                    if (newPlate.trim() === "") return;
+                    setPlate([...plate, newPlate]);
+                    setNewPlate("");
+                  }}>
+                    <View>
+                      <PlusCircle 
+                        size={28}
+                        color={"#2ab42aff"}
+                      />
+                    </View>
+                  </Pressable>
                 </View>
               </View>
+              
 
-              <Pressable onPress={()=>setChangesModal(true)} className="px-4 py-2 bg-ytheme self-end rounded-lg">
+              <Pressable onPress={()=>setChangesModal(true)} className="px-4 py-2 mb-6 bg-ytheme self-end rounded-lg">
                 <Text>Accept Changes</Text>
               </Pressable>
 

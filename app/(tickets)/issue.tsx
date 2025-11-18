@@ -6,21 +6,27 @@ import { useState } from 'react';
 import { useAuth } from '@/hooks/useUserRole';
 import { addDoc, collection, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Camera } from 'lucide-react-native';
+import { Calendar, Camera } from 'lucide-react-native';
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "@/lib/supabase";
 import * as FileSystem from "expo-file-system/legacy";
 import { decode } from 'base64-arraybuffer';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import DateMonths from '@/lib/months';
 
 
 export default function IssueTicketScreen(){
 
 	const { user } = useAuth();
 
+	const [openDatePicker, setOpenDatePicker] = useState(false);
+	
+
 	const [name, setName] = useState('');
 	const [plate, setPlate] = useState('');
 	const [violation, setViolation] = useState('');
 	const [fine, setFine] = useState('');
+	const [dueDate,setDueDate] = useState<Date | null>(null);
 	const [photo, setPhoto] = useState<ImagePicker.ImagePickerAsset>();
 
 	const uploadPhotoEvidenceToSupabase = async (asset: ImagePicker.ImagePickerAsset) => {
@@ -178,6 +184,36 @@ export default function IssueTicketScreen(){
 							value={fine}
 							onChangeText={setFine}
 						/>
+					</View>
+
+					<View>
+						<View className="flex flex-row justify-between mr-4">
+							<Text className='font-extralight text-xs mb-1'>Due Date</Text>
+						</View>
+						<Pressable onPress={()=>setOpenDatePicker(true)}>
+							<View className="flex flex-row p-2 gap-2">
+								<Text className='border-b border-foreground/10 font-extralight'>
+								{dueDate === null
+									? '--:--:----'
+									: `${DateMonths[dueDate!.getMonth()]}-${dueDate!.getDate()}-${dueDate!.getFullYear()}`}
+								</Text>
+								<Calendar 
+									color={THEME.light.border}
+								/>
+							</View>
+						</Pressable>
+						{openDatePicker && (
+						<DateTimePicker
+							value={dueDate ?? new Date()}
+							mode="date"
+							display="spinner"
+							onChange={(event, selectedDate) => {
+							setOpenDatePicker(false);
+							if (selectedDate && event.type === 'set') {setDueDate(selectedDate);console.log(selectedDate)};
+							}}
+							
+						/>
+						)}
 					</View>
 
 					<View>

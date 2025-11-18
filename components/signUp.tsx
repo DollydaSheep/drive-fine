@@ -19,6 +19,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [gender, setGender] = useState('Male');
   const [phone,setPhone] = useState('');
   const [driverLicense, setDriverLicense] = useState('');
   const [password, setPassword] = useState('');
@@ -162,6 +163,19 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
                 </Pressable>
               </View>
             </View>
+
+            <View className='flex flex-col w-full mb-1'>
+              <Text className='text-foreground text-xs mb-1'>Gender</Text>
+              <View className="flex flex-row gap-2">
+                <Pressable onPress={()=>setGender('Male')} className={`flex-1 py-2 px-4 rounded-lg border border-ytheme ${gender === 'Male' ? 'bg-ytheme' : ''}`}>
+                  <Text className={`text-sm text-center ${gender === 'Male' ? "text-background" : ''}`}>Male</Text>
+                </Pressable>
+                <Pressable onPress={()=>setGender('Female')} className={`flex-1 py-2 px-4 rounded-lg border border-ytheme ${gender === 'Female' ? 'bg-ytheme' : ''}`}>
+                  <Text className={`text-sm text-center ${gender === 'Female' ? "text-background" : ''}`}>Female</Text>
+                </Pressable>
+              </View>
+            </View>
+            
             
 
             <View className='flex flex-col w-full mb-1'>
@@ -175,10 +189,10 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
             </View>
 
             <View className='flex flex-col w-full mb-1'>
-              <Text className='text-foreground text-xs mb-1'>Driver's License Number</Text>
+              <Text className='text-foreground text-xs mb-1'>Plate No.</Text>
               <TextInput 
                 className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-                placeholder='N01-23-456789'
+                placeholder='ABC 123'
                 value={driverLicense}
                 onChangeText={setDriverLicense}
               />
