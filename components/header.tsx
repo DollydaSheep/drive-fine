@@ -17,6 +17,7 @@ export default function HeaderComponent(){
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [unpaidTix, setUnpaidTix] = useState(0);
+  const [totalFines, setTotalFines] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -41,6 +42,7 @@ export default function HeaderComponent(){
 
   useEffect(() => {
     if (!user?.uid) return;
+    if (role === 'enforcer') return;
 
     const fetchUnpaidTickets = async (userId: string) => {
       try {
@@ -54,6 +56,17 @@ export default function HeaderComponent(){
 
         setUnpaidTix(snapshot.size);
 
+        let total = 0;
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          // Make sure fineAmount exists and is a number
+          if (typeof data.fineAmount === "number") {
+            total += data.fineAmount;
+          }
+        });
+
+        setTotalFines(total);
+
       } catch (error) {
         console.error("Error fetching unread notifications:", error);
       }
@@ -61,6 +74,7 @@ export default function HeaderComponent(){
 
     fetchUnpaidTickets(user.uid);
   }, [user?.uid, refreshFlag]);
+  
   
 
   return(<>
@@ -113,14 +127,14 @@ export default function HeaderComponent(){
         <View className='px-3 w-full'>
           <View className='bg-background p-4 rounded-lg'>
             <Text className='text-foreground font-semibold'>Total Fines</Text>
-            <Text className='font-bold text-4xl text-ytheme'>₱2,000</Text>
+            <Text className='font-bold text-4xl text-ytheme'>{`₱${totalFines}.00`}</Text>
             <View className='flex flex-row justify-between'>
               <View className='flex flex-row items-center gap-1'>
                 <CircleAlert 
                   size={16}
                   color={"rgb(249 115 22)"}
                 />
-                <Text className='text-orange-500 text-sm'>{unpaidTix === 0 ? "No Payment" : "Pending Payment"}</Text>
+                <Text className={`${unpaidTix === 0 ? "text-green-500" : "text-orange-500"} text-sm`}>{unpaidTix === 0 ? "No Payment" : "Pending Payment"}</Text>
               </View>
               <View className='flex flex-row items-center gap-1'>
                 <View className={`p-1 ${unpaidTix === 0 ? "bg-green-500" : "bg-ytheme"} rounded-full`} />
