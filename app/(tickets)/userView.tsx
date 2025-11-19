@@ -22,35 +22,35 @@ export default function UserViewTickets(){
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-      if (!user?.uid) return;
-  
-      setLoading(true);
-  
-      const q = query(
-        collection(db, "tickets"),
-        where("userId","==",user.uid)
-      );
-  
-      const unsubscribe = onSnapshot(
-        q,
-        (snapshot) => {
-          console.log("Tickets snapshot updated");
-  
-          const fetchedTickets = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-  
-          setTickets(fetchedTickets);
-          setLoading(false);
-        },
-        (error) => {
-          console.error("Error fetching tickets:", error);
-        }
-      );
-  
-      return () => unsubscribe();
-    }, [user]);
+    if (!user?.uid) return;
+
+    setLoading(true);
+
+    const q = query(
+      collection(db, "tickets"),
+      where("userId","==",user.uid)
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        console.log("Tickets snapshot updated");
+
+        const fetchedTickets = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        setTickets(fetchedTickets);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching tickets:", error);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user]);
 
   return(
 		<>
