@@ -1,3 +1,4 @@
+import Skeletonbox from "@/components/skeleton/skeletonbox";
 import { Text } from "@/components/ui/text";
 import { useAppRefresh } from "@/hooks/refreshcontext";
 import { useAuth } from "@/hooks/useUserRole";
@@ -53,14 +54,19 @@ useEffect(() => {
   return(
     <>
       {loading && (
-        <View className="flex-1 bg-red-500">
-          <Text className="p-8">Loading</Text>
+        <View className="flex-1 p-4">
+          <Skeletonbox height={50} />
         </View>
       )}
       {!loading && (
         <>
         <ScrollView >
           <View className="flex-1 p-4 gap-2">
+          {notifData.length === 0 && (
+            <View className="flex flex-row items-start p-4 border border-ytheme rounded-lg gap-2">
+              <Text>No notifications.</Text>
+            </View>
+          )}
           {notifData.map((notif:any,index:number)=>(
             <View key={index} className="flex flex-row items-start p-4 border border-ytheme rounded-lg gap-2">
               <View className="p-2 bg-foreground/5 rounded-lg">
@@ -74,7 +80,7 @@ useEffect(() => {
                     size={16}
                     color={THEME.light.border}
                   />
-                  <Text className="text-xs font-light text-border">{`${DateMonths[notif.dataIssued.toDate().getMonth()]}-${notif.dataIssued.toDate().getDate()}-${notif.dataIssued.toDate().getYear()}`}</Text>
+                  <Text className="text-xs font-light text-foreground/20">{`${DateMonths[notif?.dateIssued.toDate().getMonth()]}-${notif?.dateIssued.toDate().getDate()}-${notif?.dateIssued.toDate().getFullYear()}`}</Text>
                 </View>
               </View>
             </View>

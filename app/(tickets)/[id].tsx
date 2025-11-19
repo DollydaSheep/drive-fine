@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View, Image } from 'react-native'
 import { Text } from '@/components/ui/text';
 import React, { useEffect, useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
@@ -7,23 +7,16 @@ import { collection, query, where, getDocs, getDoc, doc, Timestamp } from "fireb
 import { db } from '@/lib/firebase';
 import { Zap } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useUserRole';
+import DateMonths from '@/lib/months';
 
-type Ticket = {
-  id: string;
-  violation: string;
-  status: string;
-  dateIssued: Timestamp;
-  fineAmount: number;
-  enforcerName: string;
-  userId: string;
-};
+
 
 export default function TicketDetails() {
 
   const { user } = useAuth();
 
   const { id } = useLocalSearchParams();
-  const [ticket, setTicket] = useState<Ticket | null>(null);
+  const [ticket, setTicket] = useState<any | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -65,7 +58,8 @@ export default function TicketDetails() {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setTicket({ id: docSnap.id, ...docSnap.data() } as Ticket);
+          setTicket({ id: docSnap.id, ...docSnap.data() });
+          console.log(docSnap.data());
         } else {
           console.warn("No such ticket found!");
         }
@@ -114,7 +108,7 @@ export default function TicketDetails() {
 
           <View>
             <Text className='font-extralight text-xs'>Date Issued</Text>
-            <Text className='text-foreground'>{ticket?.dateIssued.toDate().toISOString().split("T")[0]}</Text>
+            <Text className='text-foreground'>{`${DateMonths[ticket?.dateIssued.toDate().getMonth()]}-${ticket?.dateIssued.toDate().getDate()}-${ticket?.dateIssued.toDate().getFullYear()}`}</Text>
           </View>
 
           {role === "user" ? (
@@ -125,7 +119,7 @@ export default function TicketDetails() {
           ) : (
             <View>
               <Text className='font-extralight text-xs'>Issued to</Text>
-              <Text className='text-foreground'>Mel James</Text>
+              <Text className='text-foreground'>{`${ticket?.userFirstName} ${ticket?.userLastName}`}</Text>
             </View>
           )}
 
@@ -138,6 +132,13 @@ export default function TicketDetails() {
             <Text className='font-extralight text-xs'>Fine Amount</Text>
             <Text className='text-foreground font-semibold text-2xl'>₱{ticket?.fineAmount}.00</Text>
           </View>
+
+          {role === 'enforcer' && (
+            <View>
+              <Text className='font-extralight text-xs'>Photo Evidence</Text>
+              <Image source={{ uri: ticket?.photoEvidence}} height={200} className='rounded-lg my-2' />
+            </View>
+          )}
 
           {role === 'user' && ticket?.status !== "Paid" && (
             <Pressable>

@@ -1,7 +1,7 @@
 import { THEME } from '@/lib/theme'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { Text } from '@/components/ui/text';
-import { Pressable, TextInput, View, Image, ScrollView } from 'react-native';
+import { Pressable, TextInput, View, Image, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useUserRole';
 import { addDoc, collection, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
@@ -20,7 +20,9 @@ export default function IssueTicketScreen(){
 	const { user } = useAuth();
 
 	const [openDatePicker, setOpenDatePicker] = useState(false);
-	
+
+	const [confirmModal, setConfirmModal] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const [name, setName] = useState('');
 	const [plate, setPlate] = useState('');
@@ -79,6 +81,8 @@ export default function IssueTicketScreen(){
       return;
     }
 
+		setLoading(true);
+
 		const usersRef = collection(db, "Users");
     const q = query(usersRef, where("plateNo", "==", plate));
     const querySnapshot = await getDocs(q);
@@ -92,6 +96,18 @@ export default function IssueTicketScreen(){
     const ownerData = userDoc.data();
     const ownerId = userDoc.id; // this is the userId
 
+		const enfRef = collection(db, "Users");
+		const enfQ = query(enfRef, where("id", "==", user?.uid));
+		const enfQuerySnapshot = await getDocs(enfQ);
+
+		if (enfQuerySnapshot.empty) {
+      alert("No user found with this id number.");
+      return;
+    }
+
+		const enfDoc = enfQuerySnapshot.docs[0];
+    const enfData = enfDoc.data();
+
 		await uploadPhotoEvidenceToSupabase(photo);
 
     try {
@@ -103,12 +119,18 @@ export default function IssueTicketScreen(){
         status: "Pending",
 				photoEvidence: photo?.uri,
 				userId: ownerId, // default status
+				userFirstName: ownerData.firstName,
+				userLastName: ownerData.lastName,
         enforcerId: user?.uid, // enforcer issuing ticket
+				enforcerFirstName: enfData.firstName,
+				enforcerLastName: enfData.lastName,
 				dueDate: dueDate,
         dateIssued: serverTimestamp(), // store Firestore timestamp
       });
 
       alert("Ticket issued successfully!");
+			setLoading(false);
+			setConfirmModal(false);
       setName("");
       setPlate("");
       setViolation("");
@@ -248,11 +270,36 @@ export default function IssueTicketScreen(){
 						)}
 					</View>
 
-					<Pressable onPress={handleIssueTicket}>
+					<Pressable onPress={()=>setConfirmModal(true)}>
 						<View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl mb-6'>
 							<Text className='text-background font-semibold'>Issue Ticket</Text>
 						</View>
 					</Pressable>
+					<Modal
+						animationType="fade"
+						transparent={true}
+						visible={confirmModal}
+					>
+						<View className="flex-1 justify-center items-center bg-foreground/20 p-4">
+							{loading && (
+								<ActivityIndicator size={50} />
+							)}
+							{!loading && (
+								<View className="p-4 rounded-lg bg-background border border-ytheme">
+									<Text className="text-lg">Confirm Issue Ticket</Text>
+									<Text className="text-sm font-light">Are you sure you want to issue this Ticket?</Text>
+									<View className="flex flex-row justify-evenly my-4">
+										<Pressable onPress={()=>setConfirmModal(false)} className="px-6 py-1 bg-foreground/20 rounded-lg">
+											<Text className="text-background">Cancel</Text>
+										</Pressable>
+										<Pressable className="px-6 py-1 bg-ytheme rounded-lg">
+											<Text onPress={handleIssueTicket} className="text-background">Submit</Text>
+										</Pressable>
+									</View>
+								</View>
+							)}
+						</View>
+					</Modal>
 				
 				</View>
 			</ScrollView>

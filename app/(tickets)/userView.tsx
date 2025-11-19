@@ -4,11 +4,53 @@ import { Pressable, View } from "react-native";
 import { Text } from '@/components/ui/text';
 import { ChevronRight } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
+import { useAuth } from "@/hooks/useUserRole";
+import { useEffect, useState } from "react";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import Skeletonbox from "@/components/skeleton/skeletonbox";
+import DateMonths from "@/lib/months";
 
 
 export default function UserViewTickets(){
 
 	const { colorScheme } = useColorScheme();
+
+  const { user } = useAuth();
+
+  const [tickets, setTickets] = useState<any[]>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+      if (!user?.uid) return;
+  
+      setLoading(true);
+  
+      const q = query(
+        collection(db, "tickets"),
+        where("userId","==",user.uid)
+      );
+  
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          console.log("Tickets snapshot updated");
+  
+          const fetchedTickets = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+  
+          setTickets(fetchedTickets);
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Error fetching tickets:", error);
+        }
+      );
+  
+      return () => unsubscribe();
+    }, [user]);
 
   return(
 		<>
@@ -19,18 +61,23 @@ export default function UserViewTickets(){
         }}
       />
 			<View className="flex-1 p-4 gap-2">
-				<Pressable onPress={()=>{router.push({
+
+        {loading && (
+          <Skeletonbox height={60} />
+        )}
+        {!loading && tickets?.length !== 0 && tickets?.map((ticket,index)=> (
+          <Pressable onPress={()=>{router.push({
             pathname: '/(tickets)/[id]',
-            params: { id: 1 }
+            params: { id: ticket?.id }
           })}}>
-            <View className='py-3 px-4 rounded-lg border border-ytheme'>
+            <View key={index} className='py-3 px-4 rounded-lg border border-ytheme'>
               <View className='flex flex-row justify-between items-center'>
-                <Text className='text-foreground font-medium'>Illegal Parking</Text>
+                <Text className='text-foreground font-medium'>{ticket?.violation}</Text>
               </View>
-							<Text className="text-sm">Enforcer Nabunturan</Text>
-              <Text className='font-light text-sm text-foreground'>2025-10-10</Text>
+							<Text className="text-sm">{`${ticket?.enforcerFirstName} ${ticket?.enforcerLastName}`}</Text>
+              <Text className='font-light text-sm text-foreground'>{`${DateMonths[ticket?.dateIssued.toDate().getMonth()]}-${ticket?.dateIssued.toDate().getDate()}-${ticket?.dateIssued.toDate().getFullYear()}`}</Text>
               <View className='flex flex-row justify-between mt-2'>
-                <Text className='text-lg font-semibold text-foreground'>₱2,000.00</Text>
+                <Text className='text-lg font-semibold text-foreground'>{`₱${ticket?.fineAmount}.00`}</Text>
                 <ChevronRight 
                   size={20}
                   color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
@@ -38,21 +85,8 @@ export default function UserViewTickets(){
               </View>
             </View>
           </Pressable>
-
-					<View className='py-3 px-4 rounded-lg border border-ytheme'>
-            <View className='flex flex-row justify-between items-center'>
-              <Text className='text-foreground font-medium'>No Seatbelt</Text>
-            </View>
-						<Text className="text-sm">Enforcer Nabunturan</Text>
-            <Text className='font-light text-sm text-foreground'>2025-09-15</Text>
-            <View className='flex flex-row justify-between mt-2'>
-              <Text className='text-lg font-semibold text-foreground'>₱200.00</Text>
-              <ChevronRight 
-                size={20}
-                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-              />
-            </View>
-          </View>
+        ))}
+				
 			</View>
 		</>
 	)
