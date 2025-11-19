@@ -3,17 +3,20 @@ import { Text } from '@/components/ui/text';
 import { CircleAlert, User } from 'lucide-react-native';
 import { useAuth } from '@/hooks/useUserRole';
 import { useEffect, useState } from 'react';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { navigate } from 'expo-router/build/global-state/routing';
+import { useAppRefresh } from '@/hooks/refreshcontext';
 
 export default function HeaderComponent(){
 
   const { user } = useAuth();
 
+  const { setIsRefreshing, isRefreshing ,refreshFlag ,triggerRefresh } = useAppRefresh();
   const [profile,setProfile] = useState('');
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [unpaidTix, setUnpaidTix] = useState(0);
 
   useEffect(() => {
     if (!user) return;
@@ -35,6 +38,30 @@ export default function HeaderComponent(){
 
     return () => unsubscribe();
   }, [user]);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const fetchUnpaidTickets = async (userId: string) => {
+      try {
+        const q = query(
+          collection(db, "tickets"),
+          where("userId", "==", userId),
+          where("status", "==", "Pending")
+        );
+
+        const snapshot = await getDocs(q);
+
+        setUnpaidTix(snapshot.size);
+
+      } catch (error) {
+        console.error("Error fetching unread notifications:", error);
+      }
+    };
+
+    fetchUnpaidTickets(user.uid);
+  }, [user?.uid, refreshFlag]);
+  
 
   return(<>
     <ImageBackground 
@@ -93,11 +120,11 @@ export default function HeaderComponent(){
                   size={16}
                   color={"rgb(249 115 22)"}
                 />
-                <Text className='text-orange-500 text-sm'>Payment due</Text>
+                <Text className='text-orange-500 text-sm'>{unpaidTix === 0 ? "No Payment" : "Pending Payment"}</Text>
               </View>
               <View className='flex flex-row items-center gap-1'>
-                <View className='p-1 bg-ytheme rounded-full' />
-                <Text className='text-ytheme text-xs font-medium'>1 Unpaid Ticket</Text>
+                <View className={`p-1 ${unpaidTix === 0 ? "bg-green-500" : "bg-ytheme"} rounded-full`} />
+                <Text className={`${unpaidTix === 0 ? "text-green-500" : "text-ytheme"} text-xs font-medium`}>{unpaidTix} Unpaid Ticket</Text>
               </View>
             </View>
           </View>

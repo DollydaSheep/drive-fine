@@ -224,7 +224,12 @@ export default function AboutScreen(){
                     color={THEME.light.border}
                   />
                 </View>
-                <Text className='text-foreground text-lg'>{profileData?.plate ? `${profileData.plate}` : '---'}</Text>
+                {profileData?.plate && profileData?.plate.map((p:string,index:number)=>(
+                  <Text key={index} className='text-foreground text-lg'>{p}</Text>
+                ))}
+                {!profileData?.plate && (
+                  <Text className='text-foreground text-lg'>---</Text>
+                )}
               </View>
 
             </View>

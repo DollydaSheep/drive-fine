@@ -1,7 +1,7 @@
 import { Text } from '@/components/ui/text';
 import { ChevronRight, CircleAlert, Clock, FileText, Wallet } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
-import { Image, ImageBackground, type ImageStyle, Pressable, ScrollView, TextInput, View } from 'react-native';
+import { Image, ImageBackground, type ImageStyle, Pressable, RefreshControl, ScrollView, TextInput, View } from 'react-native';
 import { navigate } from 'expo-router/build/global-state/routing';
 import { THEME } from '@/lib/theme';
 import { useEffect, useState } from 'react';
@@ -11,12 +11,14 @@ import { auth, db } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useUserRole';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import SkeletonDashboard from './skeletonDashboard';
+import { useAppRefresh } from '@/hooks/refreshcontext';
 
 
 export default function UserDashboard() {
 
 	const { colorScheme } = useColorScheme();
 
+  const { setIsRefreshing, isRefreshing ,refreshFlag ,triggerRefresh } = useAppRefresh();
 	const [tickets, setTickets] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -48,11 +50,12 @@ export default function UserDashboard() {
         console.error("Error fetching tickets:", error);
       } finally {
         setLoading(false);
+        setIsRefreshing(false);
       }
     };
 
     fetchTickets();
-  }, [user]);
+  }, [user, refreshFlag]);
 	
 
 	return(
@@ -61,7 +64,7 @@ export default function UserDashboard() {
         <SkeletonDashboard />
       )}
 			{!loading && (
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={async ()=>{setIsRefreshing(true);triggerRefresh();}} />}>
 
           <View className='flex-1 p-3 gap-2'>
 

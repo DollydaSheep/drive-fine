@@ -1,7 +1,7 @@
 import { THEME } from '@/lib/theme'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { Text } from '@/components/ui/text';
-import { Pressable, TextInput, View, Image } from 'react-native';
+import { Pressable, TextInput, View, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useUserRole';
 import { addDoc, collection, doc, getDocs, query, serverTimestamp, setDoc, where } from 'firebase/firestore';
@@ -74,7 +74,7 @@ export default function IssueTicketScreen(){
 	};
 
 	const handleIssueTicket = async () => {
-    if (!name || !plate || !violation || !fine || !photo) {
+    if (!name || !plate || !violation || !fine || !dueDate || !photo) {
       alert("Please fill out all fields.");
       return;
     }
@@ -104,6 +104,7 @@ export default function IssueTicketScreen(){
 				photoEvidence: photo?.uri,
 				userId: ownerId, // default status
         enforcerId: user?.uid, // enforcer issuing ticket
+				dueDate: dueDate,
         dateIssued: serverTimestamp(), // store Firestore timestamp
       });
 
@@ -113,6 +114,14 @@ export default function IssueTicketScreen(){
       setViolation("");
       setFine("");
 			setPhoto(undefined);
+			await addDoc(collection(db, "notification"), {
+				userId: ownerId,
+				enforcerId: user?.uid,
+				dateIssued: serverTimestamp(),
+				dueDate: dueDate,
+				violation,
+				status: "Unread"
+			})
 
     } catch (error) {
       console.error("Error issuing ticket:", error);
@@ -143,7 +152,7 @@ export default function IssueTicketScreen(){
           title: "Issue Ticket"
         }}
       />
-			<View className='p-4'>
+			<ScrollView className='p-4'>
 				<View className='bg-background border border-ytheme p-4 rounded-xl gap-3' style={{boxShadow: "0 3px 4px rgba(0,0,0,0.1)"}}>
 
 					<View>
@@ -240,13 +249,13 @@ export default function IssueTicketScreen(){
 					</View>
 
 					<Pressable onPress={handleIssueTicket}>
-						<View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl'>
+						<View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl mb-6'>
 							<Text className='text-background font-semibold'>Issue Ticket</Text>
 						</View>
 					</Pressable>
 				
 				</View>
-			</View>
+			</ScrollView>
 		</>
 	)
 }
