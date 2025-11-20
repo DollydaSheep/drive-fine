@@ -66,11 +66,11 @@ export default function UserViewTickets(){
           <Skeletonbox height={60} />
         )}
         {!loading && tickets?.length !== 0 && tickets?.map((ticket,index)=> (
-          <Pressable onPress={()=>{router.push({
+          <Pressable key={index} onPress={()=>{router.push({
             pathname: '/(tickets)/[id]',
             params: { id: ticket?.id }
           })}}>
-            <View key={index} className='py-3 px-4 rounded-lg border border-ytheme'>
+            <View className='py-3 px-4 rounded-lg border border-ytheme'>
               <View className='flex flex-row justify-between items-center'>
                 <Text className='text-foreground font-medium'>{ticket?.violation}</Text>
               </View>

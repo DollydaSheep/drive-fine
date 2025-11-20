@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View, Image } from 'react-native'
 import { Text } from '@/components/ui/text';
 import React, { useEffect, useState } from 'react'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { THEME } from '@/lib/theme';
 import { collection, query, where, getDocs, getDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from '@/lib/firebase';
@@ -141,7 +141,7 @@ export default function TicketDetails() {
           )}
 
           {role === 'user' && ticket?.status !== "Paid" && (
-            <Pressable>
+            <Pressable onPress={()=>router.push('/payfines')}>
               <View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl'>
                 <Text className='text-background font-semibold'>Pay Now</Text>
               </View>
