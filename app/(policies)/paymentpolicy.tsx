@@ -3,17 +3,17 @@ import { router, Stack } from "expo-router";
 import { Linking, Pressable, View } from "react-native";
 import { Text } from '@/components/ui/text';
 
-export default function PoliciesScreen(){
+export default function PaymentPolicyScreen(){
   return(
 		<>
 			<Stack.Screen 
         options={{
           headerStyle: { backgroundColor: THEME.light.ytheme},
-          title: "Rules & Policies"
+          title: "Payment Policies"
         }}
       />
 			<View className="p-4 gap-2">
-				{/* <View className="border border-ytheme p-4 rounded-lg gap-2">
+				<View className="border border-ytheme p-4 rounded-lg gap-2">
 					<Text className="text-lg font-semibold mb-2">Payment Policies</Text>
 					<View className="flex flex-row items-start ml-4 mr-4 gap-2">
 						<View className="p-1 mt-2 bg-ytheme rounded-full"></View>
@@ -35,24 +35,6 @@ export default function PoliciesScreen(){
 						<View className="p-1 mt-2 bg-ytheme rounded-full"></View>
 						<Text>Receipts should be kept for 2 years</Text>
 					</View>
-				</View> */}
-				<View className="border border-ytheme p-4 rounded-lg gap-2">
-					<Pressable onPress={()=>router.push("/paymentpolicy")}>
-						<Text>Payment Policies</Text>
-					</Pressable>
-				</View>
-				<View className="border border-ytheme p-4 rounded-lg gap-2">
-					{/* <Pressable onPress={()=>Linking.openURL("https://portal.lto.gov.ph/ords/f?p=ELEARNING:HOME:115085686602393:::HOME:P1_ELEARN_TOPICS_FK:A9EDD4DC2A24AB72E0530D28780ACC4D")}>
-						<Text>Rights, Duties and Responsibilities of Drivers</Text>
-					</Pressable> */}
-					<Pressable onPress={()=>router.push("/rightspolicy")}>
-						<Text>Rights, Duties and Responsibilities of Drivers</Text>
-					</Pressable>
-				</View>
-				<View className="border border-ytheme p-4 rounded-lg gap-2">
-					<Pressable onPress={()=>router.push("/finespolicy")}>
-						<Text>Fines and Penalties for Violations</Text>
-					</Pressable>
 				</View>
 			</View>
 		</>
