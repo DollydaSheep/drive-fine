@@ -21,7 +21,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const [email, setEmail] = useState('');
   const [gender, setGender] = useState('Male');
   const [phone,setPhone] = useState('');
-  const [driverLicense, setDriverLicense] = useState('');
+  const [plate, setPlate] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
 
@@ -42,7 +42,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   }
 
   const handleSignUp = async () => {
-    if(!firstName || !lastName || !email || !phone || !driverLicense || !password){
+    if(!firstName || !lastName || !email || !phone || !plate || !password){
       Alert.alert("Error", "Please fill in all fields!")
       return;
     }
@@ -63,7 +63,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
         email,
         role: selectedRole,
         phone,
-        driverLicense,
+        plate: [plate],
         createdAt: new Date()
       })
 
@@ -193,8 +193,8 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
               <TextInput 
                 className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
                 placeholder='ABC 123'
-                value={driverLicense}
-                onChangeText={setDriverLicense}
+                value={plate}
+                onChangeText={setPlate}
               />
             </View>
           </>
