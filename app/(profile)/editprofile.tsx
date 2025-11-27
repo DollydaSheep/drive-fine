@@ -16,10 +16,12 @@ import SkeletonProfile from "@/components/skeletonProfile";
 import DateMonths from "@/lib/months";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardProvider, KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useColorScheme } from "nativewind";
 
 
 export default function EditProfileScreen(){
 
+  const { colorScheme } = useColorScheme();
   const { user } = useAuth();
 
   const [profile, setProfile] = useState('');
@@ -217,7 +219,7 @@ export default function EditProfileScreen(){
               </View>
               <Pressable onPress={handleEditProfile}>
                 <View className="py-2 px-3 bg-foreground/20 justify-self-center rounded-lg">
-                  <Text className="text-sm text-background">Change Profile Picture</Text>
+                  <Text className="text-sm text-foreground">Change Profile Picture</Text>
                 </View>
               </Pressable>  
             </View>
@@ -229,8 +231,9 @@ export default function EditProfileScreen(){
                 </View>
                 <View className="flex flex-row items-center">
                   <TextInput 
-                    className="border-b border-foreground/20 w-full"
+                    className="border-b border-foreground/20 text-foreground w-full"
                     placeholder="---"
+                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
                     value={firstName}
                     onChangeText={setFirstName}
                   />
@@ -249,7 +252,8 @@ export default function EditProfileScreen(){
                 </View>
                 <View className="flex flex-row items-center">
                   <TextInput 
-                    className="border-b border-foreground/20 w-full"
+                    className="border-b border-foreground/20 w-full text-foreground"
+                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
                     placeholder="---"
                     value={lastName}
                     onChangeText={setLastName}
@@ -283,13 +287,13 @@ export default function EditProfileScreen(){
                 </View>
                 <Pressable onPress={()=>setOpenDatePicker(true)}>
                   <View className="flex flex-row p-2 gap-2">
-                    <Text>
+                    <Text className="text-foreground">
                       {birthDate === null
                         ? '--:--:----'
                         : `${DateMonths[birthDate.getMonth()]}-${birthDate.getDate()}-${birthDate.getFullYear()}`}
                     </Text>
                     <Calendar 
-                    
+                      color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
                     />
                   </View>
                 </Pressable>
@@ -313,8 +317,9 @@ export default function EditProfileScreen(){
                 </View>
                 <View className="flex flex-row items-center">
                   <TextInput 
-                    className="border-b border-foreground/20 w-full"
+                    className="border-b border-foreground/20 text-foreground w-full"
                     placeholder="---"
+                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
                     value={email}
                     onChangeText={setEmail}
                   />
@@ -333,8 +338,9 @@ export default function EditProfileScreen(){
                 </View>
                 <View className="flex flex-row items-center">
                   <TextInput 
-                    className="border-b border-foreground/20 w-full"
+                    className="border-b border-foreground/20 text-foreground w-full"
                     placeholder="---"
+                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
                     value={phone}
                     onChangeText={setPhone}
                   />
@@ -393,8 +399,9 @@ export default function EditProfileScreen(){
                 ))}
                 <View className="flex flex-row items-center">
                   <TextInput 
-                    className="border-b border-foreground/20 w-full"
+                    className="border-b border-foreground/20 text-foreground w-full"
                     placeholder="---"
+                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
                     value={newPlate}
                     onChangeText={setNewPlate}
                   />

@@ -1,11 +1,15 @@
 import { Text } from "@/components/ui/text";
 import { auth } from "@/lib/firebase";
+import { THEME } from "@/lib/theme";
+import { router } from "expo-router";
 import { signOut } from "firebase/auth";
 import { FileWarning, Flag, Languages, Lock, LogOut, Moon } from "lucide-react-native";
+import { useColorScheme } from "nativewind";
 import { Pressable, ScrollView, View } from "react-native";
 
 
 export default function HistoryScreen(){
+  const { colorScheme } = useColorScheme();
 
   const handleLogout = async () => {
         signOut(auth)
@@ -21,37 +25,50 @@ export default function HistoryScreen(){
     <>
       <ScrollView>
         <View className="flex-1 p-4 gap-2">
-          <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
-            <FileWarning 
-              size={24}
-            />
-            <Text>Terms & Conditions</Text>
-          </View>
+          <Pressable onPress={()=>router.push("/terms")}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
+              <FileWarning 
+                size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text>Terms & Conditions</Text>
+            </View>
+          </Pressable>
 
-          <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
-            <Languages 
-              size={24}
-            />
-            <Text>Language</Text>
-          </View>
+          <Pressable onPress={()=>router.push("/language")}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
+              <Languages 
+                size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text>Language</Text>
+            </View>
+          </Pressable>
 
-          <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
-            <Flag 
-              size={24}
-            />
-            <Text>Report & Feedback</Text>
-          </View>
+          <Pressable onPress={()=>router.push("/report")}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
+              <Flag 
+                size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text>Report & Feedback</Text>
+            </View>
+          </Pressable>
 
-          <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
-            <Moon 
-              size={24}
-            />
-            <Text>Dark / Light Mode</Text>
-          </View>
+          <Pressable onPress={()=>router.push("/darkmode")}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
+              <Moon 
+                size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text>Dark / Light Mode</Text>
+            </View>
+          </Pressable>
 
           <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
             <Lock 
               size={24}
+              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
             />
             <Text>Security</Text>
           </View>
@@ -60,6 +77,7 @@ export default function HistoryScreen(){
             <View className="flex flex-row items-center gap-2 p-3 bg-red-500 rounded-lg">
               <LogOut 
                 size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
               />
               <Text>Logout</Text>
             </View>

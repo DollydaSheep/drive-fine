@@ -98,6 +98,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
           <TextInput 
             className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
             placeholder='Enter your First Name'
+            placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
             value={firstName}
             onChangeText={setFirstName}
           />
@@ -108,16 +109,18 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
           <TextInput 
             className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
             placeholder='Enter your Last Name'
+            placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
             value={lastName}
             onChangeText={setLastName}
           />
         </View>
 
         <View className='flex flex-col w-full mb-1'>
-          <Text className='text-foreground text-xs mb-1'>Email Adress</Text>
+          <Text className='text-foreground text-xs mb-1'>Email Address</Text>
             <TextInput 
               className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
               placeholder='email@email.com'
+              placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
               value={email}
               onChangeText={setEmail}
             />
@@ -128,6 +131,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
             <TextInput 
               className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
               placeholder='Create a password'
+              placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
               value={password}
               onChangeText={setPassword}
             />
@@ -138,6 +142,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
             <TextInput 
               className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
               placeholder='Re-enter your password'
+              placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
               value={confirm}
               onChangeText={setConfirm}
             />
@@ -183,20 +188,24 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
               <TextInput 
                 className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
                 placeholder='e.g. 0944 455 5464'
+                placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
                 value={phone}
                 onChangeText={setPhone}
               />
             </View>
 
-            <View className='flex flex-col w-full mb-1'>
-              <Text className='text-foreground text-xs mb-1'>Plate No.</Text>
-              <TextInput 
-                className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-                placeholder='ABC 123'
-                value={plate}
-                onChangeText={setPlate}
-              />
-            </View>
+            {selectedRole === 'user' && (
+              <View className='flex flex-col w-full mb-1'>
+                <Text className='text-foreground text-xs mb-1'>Plate No.</Text>
+                <TextInput 
+                  className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
+                  placeholder='ABC 123'
+                  placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+                  value={plate}
+                  onChangeText={setPlate}
+                />
+              </View>
+            )}
           </>
         )}
 

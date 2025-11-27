@@ -13,9 +13,12 @@ import * as FileSystem from "expo-file-system/legacy";
 import { decode } from 'base64-arraybuffer';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateMonths from '@/lib/months';
+import { useColorScheme } from 'nativewind';
 
 
 export default function IssueTicketScreen(){
+
+	const { colorScheme } = useColorScheme();
 
 	const { user } = useAuth();
 
@@ -182,6 +185,7 @@ export default function IssueTicketScreen(){
 						<TextInput 
 							className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
 							placeholder='e.g. Justin Nabunturan'
+							placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
 							value={name}
 							onChangeText={setName}
 						/>
@@ -192,6 +196,7 @@ export default function IssueTicketScreen(){
 						<TextInput 
 							className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
 							placeholder='123 LBC'
+							placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
 							value={plate}
 							onChangeText={setPlate}
 						/>
@@ -202,6 +207,7 @@ export default function IssueTicketScreen(){
 						<TextInput 
 							className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
 							placeholder='Illegal Parking'
+							placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
 							value={violation}
 							onChangeText={setViolation}
 						/>
@@ -212,6 +218,7 @@ export default function IssueTicketScreen(){
 						<TextInput 
 							className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
 							placeholder='2000.00'
+							placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
 							value={fine}
 							onChangeText={setFine}
 						/>
@@ -272,7 +279,7 @@ export default function IssueTicketScreen(){
 
 					<Pressable onPress={()=>setConfirmModal(true)}>
 						<View className='flex flex-row justify-center p-3 bg-ytheme rounded-xl mb-6'>
-							<Text className='text-background font-semibold'>Issue Ticket</Text>
+							<Text className='text-white font-semibold'>Issue Ticket</Text>
 						</View>
 					</Pressable>
 					<Modal

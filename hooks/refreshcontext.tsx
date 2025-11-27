@@ -6,6 +6,8 @@ type RefreshContextType = {
   triggerRefresh: () => void;
   isRefreshing: boolean;
   setIsRefreshing: (value: boolean) => void;
+  darkmode: boolean;
+  setDarkmode: (value: boolean) => void;
 };
 
 type RefreshProviderProps = {
@@ -17,11 +19,12 @@ const RefreshContext = createContext<RefreshContextType | null>(null);
 export function RefreshProvider({ children }: RefreshProviderProps) {
   const [refreshFlag, setRefreshFlag] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [darkmode, setDarkmode] = useState(false);
 
   const triggerRefresh = () => setRefreshFlag((prev) => prev + 1);
 
   return (
-    <RefreshContext.Provider value={{ refreshFlag, triggerRefresh, isRefreshing, setIsRefreshing }}>
+    <RefreshContext.Provider value={{ refreshFlag, triggerRefresh, isRefreshing, setIsRefreshing, darkmode, setDarkmode }}>
       {children}
     </RefreshContext.Provider>
   );

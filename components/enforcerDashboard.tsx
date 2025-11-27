@@ -104,7 +104,7 @@ export default function EnforcerDashboard(){
 							</View>
 						</Pressable>
 
-						<Pressable className='w-full' onPress={()=>navigate('/(tabs)/about')}>
+						<Pressable className='w-full' onPress={()=>navigate('/(policies)/policies')}>
 							<View className='flex flex-row items-center justify-between p-3 bg-ytheme rounded-lg' style={{boxShadow: "0px 2px 5px rgba(0,0,0,0.15)"}}>
 								<View className='flex flex-row items-center gap-2'>
 									<CircleAlert 
@@ -154,21 +154,6 @@ export default function EnforcerDashboard(){
 								</Pressable>
 							))
 						)}
-
-						<View className='py-3 px-4 rounded-lg border border-ytheme'>
-							<View className='flex flex-row justify-between items-center'>
-								<Text className='text-foreground font-medium'>No Seatbelt</Text>
-								<Text className='text-xs font-medium text-foreground/50 bg-green-500/20 px-3 py-1 rounded-full'>Paid</Text>
-							</View>
-							<Text className='font-light text-sm text-foreground'>2025-09-15</Text>
-							<View className='flex flex-row justify-between mt-2'>
-								<Text className='text-lg font-semibold text-foreground'>₱200.00</Text>
-								<ChevronRight 
-									size={20}
-									color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-								/>
-							</View>
-						</View>
 
 					</View>
 

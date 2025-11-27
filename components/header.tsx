@@ -84,7 +84,7 @@ export default function HeaderComponent(){
       style={{boxShadow:"0 3px 3px rgba(0,0,0,0.2)" }}
     >
     <View className='flex flex-row justify-between items-center mt-7 mb-4 w-full px-4'>
-      <View className='flex flex-row items-center bg-background py-1 px-3 rounded-full'>
+      <View className='flex flex-row items-center bg-white py-1 px-3 rounded-full'>
         <Image
           source={require('@/assets/images/logoP.png')}
           resizeMethod='resize'
@@ -105,7 +105,7 @@ export default function HeaderComponent(){
         />
       </View>
       <Pressable onPress={()=>navigate('/(tabs)/profile')}>
-        <View className={`${profile ? 'p-0.5' : 'p-3'} rounded-full bg-background`}>
+        <View className={`${profile ? 'p-0.5' : 'p-3'} rounded-full bg-white`}>
           {!profile ? (
                 <User 
                   size={16}

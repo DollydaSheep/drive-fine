@@ -7,11 +7,13 @@ import DateMonths from "@/lib/months";
 import { THEME } from "@/lib/theme";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Bell, Calendar } from "lucide-react-native";
+import { useColorScheme } from "nativewind";
 import { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 
 export default function TicketsScreen(){
+  const { colorScheme } = useColorScheme();
 
   const { user } = useAuth();
 
@@ -70,7 +72,9 @@ useEffect(() => {
           {notifData.map((notif:any,index:number)=>(
             <View key={index} className="flex flex-row items-start p-4 border border-ytheme rounded-lg gap-2">
               <View className="p-2 bg-foreground/5 rounded-lg">
-                <Bell />
+                <Bell 
+                  color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+                />
               </View>
               <View className="flex">
                 <Text className="text-lg font-medium text-orange-400">Issued Ticket</Text>

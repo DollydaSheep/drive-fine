@@ -15,8 +15,11 @@ import Skeletoncircle from "@/components/skeleton/skeletoncircle";
 import SkeletonProfile from "@/components/skeletonProfile";
 import { router } from "expo-router";
 import DateMonths from "@/lib/months";
+import { useColorScheme } from "nativewind";
 
 export default function AboutScreen(){
+
+  const { colorScheme } = useColorScheme();
   
   const { user } = useAuth();
 
@@ -126,12 +129,13 @@ export default function AboutScreen(){
           <View className="flex-1 p-4">
             
             <View className="flex flex-column justify-center items-center p-4 gap-2">
-              <View className={`${profile ? 'p-1' : 'p-4'} rounded-full bg-black/10`}>
+              <View className={`${profile ? 'p-1' : 'p-4'} rounded-full bg-foreground/10`}>
                 {!profile ? (
                   <User 
                     size={56}
                     width={50}
                     height={50}
+                    color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
                   />
                 ): (
                   <Image 
@@ -144,7 +148,7 @@ export default function AboutScreen(){
               </View>
               <Pressable onPress={()=>router.push('/editprofile')}>
                 <View className="py-2 px-3 bg-foreground/20 justify-self-center rounded-lg">
-                  <Text className="text-sm text-background">Edit Profile</Text>
+                  <Text className="text-sm text-foreground">Edit Profile</Text>
                 </View>
               </Pressable>  
             </View>

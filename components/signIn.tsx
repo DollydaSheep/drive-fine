@@ -4,9 +4,13 @@ import { Text } from '@/components/ui/text';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { useColorScheme } from 'nativewind';
+import { THEME } from '@/lib/theme';
 
 
 export default function SignInComponent({ onSwitch }: { onSwitch: () => void}){
+
+  const { colorScheme } = useColorScheme();
 
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
@@ -47,19 +51,22 @@ export default function SignInComponent({ onSwitch }: { onSwitch: () => void}){
               resizeMethod='resize'
               resizeMode='cover'
               style={{
+                borderRadius: 50,
+                backgroundColor: '#fff',
                 width: 200,
                 height: 200,
               }}
             />
-            <Text className='text-center text-foreground italic text-sm font-medium -mt-5'>Your all-in-one solution for managing traffic violations and fines</Text>
+            <Text className='text-center text-foreground italic text-sm font-medium mt-2'>Your all-in-one solution for managing traffic violations and fines</Text>
           </View>
           <View className='flex flex-col items-center gap-2 w-full p-4 rounded-lg'>
             <Text className='text-2xl font-semibold text-foreground'>Sign In</Text>
             <View className='flex flex-col w-full mb-1'>
-              <Text className='text-foreground text-xs mb-1'>User ID</Text>
+              <Text className='text-foreground text-xs mb-1'>Email</Text>
               <TextInput 
                 className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
-                placeholder='Enter your User ID'
+                placeholder='Enter your Email Address'
+                placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
                 value={userID}
                 onChangeText={setUserID}
               />
@@ -69,6 +76,7 @@ export default function SignInComponent({ onSwitch }: { onSwitch: () => void}){
               <TextInput 
                 className='bg-foreground/10 px-4 py-3 rounded-lg w-full text-foreground focus:border focus:border-foreground'
                 placeholder='Enter your password'
+                placeholderTextColor={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
                 value={password}
                 onChangeText={setPassword}
               />
