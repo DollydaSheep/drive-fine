@@ -1,4 +1,4 @@
-import { Alert, Image, type ImageStyle, Platform, Pressable, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, type ImageStyle, Modal, Platform, Pressable, TextInput, View } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { useState } from 'react';
 import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
@@ -14,7 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   const { colorScheme } = useColorScheme();
 
-  
+  const[loading,setLoading] = useState(false);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -50,7 +50,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
       Alert.alert("Error", "Passwords do not match!");
       return;
     }
-    
+    setLoading(true);
     try{
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCred.user
@@ -68,7 +68,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
       })
 
       
-
+      setLoading(false);
       Alert.alert("Success", "Account created successfully!");
       onSwitch();
     } catch(err){
@@ -233,6 +233,18 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
           </View>
         </Pressable>
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={loading}
+      >
+        <View className="bg-foreground/10 flex-1 flex flex-row items-center justify-center">
+          {loading && (
+            <ActivityIndicator size={50}/>
+          )}
+        </View>
+        
+      </Modal>
       </ScrollView>
       
       </KeyboardAvoidingView>

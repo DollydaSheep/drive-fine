@@ -65,13 +65,15 @@ export default function HistoryScreen(){
             </View>
           </Pressable>
 
-          <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
-            <Lock 
-              size={24}
-              color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
-            />
-            <Text>Security</Text>
-          </View>
+          <Pressable onPress={()=>router.push("/security")}>
+            <View className="flex flex-row items-center gap-2 p-3 bg-ytheme rounded-lg">
+              <Lock 
+                size={24}
+                color={colorScheme === 'dark' ? THEME.dark.foreground : THEME.light.foreground}
+              />
+              <Text>Security</Text>
+            </View>
+          </Pressable>
 
           <Pressable onPress={handleLogout}>
             <View className="flex flex-row items-center gap-2 p-3 bg-red-500 rounded-lg">

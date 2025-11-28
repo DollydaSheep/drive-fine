@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useAppRefresh } from "@/hooks/refreshcontext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ReportScreen(){
+export default function DarkmodeScreen(){
 
 	const { darkmode, setDarkmode } = useAppRefresh();
 
@@ -30,7 +30,7 @@ export default function ReportScreen(){
 			<Stack.Screen 
         options={{
           headerStyle: { backgroundColor: THEME.light.ytheme},
-          title: "Report & Feedback"
+          title: "Dark / Light Mode"
         }}
       />
 			<View className="p-4 gap-2">
