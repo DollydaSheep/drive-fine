@@ -114,7 +114,7 @@ export default function TicketDetails() {
           {role === "user" ? (
             <View>
               <Text className='font-extralight text-xs'>Issued by</Text>
-              <Text className='text-foreground'>Enforcer Nabunturan</Text>
+              <Text className='text-foreground'>{`${ticket?.enforcerFirstName} ${ticket?.enforcerLastName}`}</Text>
             </View>
           ) : (
             <View>
@@ -125,7 +125,7 @@ export default function TicketDetails() {
 
           <View>
             <Text className='font-extralight text-xs'>Plate Number</Text>
-            <Text className='text-foreground'>123 LBC</Text>
+            <Text className='text-foreground'>{ticket?.plate}</Text>
           </View>
 
           <View>

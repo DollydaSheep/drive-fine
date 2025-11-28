@@ -81,17 +81,19 @@ export default function IssueTicketScreen(){
 	const handleIssueTicket = async () => {
     if (!name || !plate || !violation || !fine || !dueDate || !photo) {
       alert("Please fill out all fields.");
+			setLoading(false)
       return;
     }
 
 		setLoading(true);
 
 		const usersRef = collection(db, "Users");
-    const q = query(usersRef, where("plateNo", "==", plate));
+    const q = query(usersRef, where("plate", "array-contains", plate));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
       alert("No user found with this plate number.");
+			setLoading(false)
       return;
     }
 
@@ -105,6 +107,7 @@ export default function IssueTicketScreen(){
 
 		if (enfQuerySnapshot.empty) {
       alert("No user found with this id number.");
+			setLoading(false)
       return;
     }
 
@@ -116,7 +119,7 @@ export default function IssueTicketScreen(){
     try {
       await addDoc(collection(db, "tickets"), {
         name,
-        plateNo: plate,
+        plate: plate,
         violation,
         fineAmount: parseFloat(fine),
         status: "Pending",

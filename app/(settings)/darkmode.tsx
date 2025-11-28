@@ -6,18 +6,23 @@ import { Check } from "lucide-react-native";
 import ToggleSwitch from 'toggle-switch-react-native'
 import { useState } from "react";
 import { useAppRefresh } from "@/hooks/refreshcontext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ReportScreen(){
 
 	const { darkmode, setDarkmode } = useAppRefresh();
 
+	const saveDarkMode = async (value: boolean) => {
+		try {
+			await AsyncStorage.setItem("darkMode", JSON.stringify(value));
+		} catch (e) {
+			console.log("Failed to save dark mode", e);
+		}
+	};
+
 	const handleToggle = () => {
 		setDarkmode(!darkmode)
-		if(darkmode){
-			Appearance.setColorScheme('light')
-		} else {
-			Appearance.setColorScheme('dark')
-		}
+		saveDarkMode(!darkmode)
 	}
 
   return(
