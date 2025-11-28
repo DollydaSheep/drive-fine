@@ -42,7 +42,7 @@ export default function SignUpComponent({ onSwitch }: { onSwitch: () => void}){
   }
 
   const handleSignUp = async () => {
-    if(!firstName || !lastName || !email || !phone || !plate || !password){
+    if(!firstName || !lastName || !email || !phone || !password || selectedRole === "user" && !plate){
       Alert.alert("Error", "Please fill in all fields!")
       return;
     }

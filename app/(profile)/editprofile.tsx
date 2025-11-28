@@ -31,6 +31,8 @@ export default function EditProfileScreen(){
 
   const [changedProfile, setChangedProfile] = useState(false);
 
+  const [role, setRole] = useState('');
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('');
@@ -63,6 +65,7 @@ export default function EditProfileScreen(){
         setEmail(data.email ? data.email : '');
         setPhone(data.phone ? data.phone : '');
         setPlate(data.plate ? data.plate : '');
+        setRole(data.role)
 
         console.log(new Date())
 
@@ -353,72 +356,74 @@ export default function EditProfileScreen(){
                 </View>
               </View>
 
-              <View className="mb-4">
-                <View className="flex flex-row justify-between mr-4">
-                  <Text className='font-extralight text-sm'>Plate No.</Text>
-                </View>
-                {plate && plate.map((p,index)=>(
-                  <View key={index} className="mb-2">
-                    <View className="flex flex-row items-center">
-                      <Text>{p}</Text>
-                      <Pressable onPress={handleDeletePlateNo} className="absolute right-0 p-2">
-                        <View >
-                          <XCircle 
-                            size={28}
-                            color={"#da1f1fff"}
-                          />
-                        </View>
-                      </Pressable>
-                    </View>
-                    <Modal
-                      animationType="fade"
-                      transparent={true}
-                      visible={deletePlateNo}
-                    >
-                      <View className="flex-1 justify-center items-center bg-foreground/20 p-4">
-                        {loading && (
-                          <ActivityIndicator size={50} />
-                        )}
-                        {!loading && (
-                          <View className="p-4 rounded-lg bg-background border border-ytheme">
-                            <Text className="text-lg">Delete Plate No.</Text>
-                            <Text className="text-sm font-light">Are you sure you want to delete plate no.?</Text>
-                            <View className="flex flex-row justify-evenly my-4">
-                              <Pressable onPress={()=>setDeletePlateNo(false)} className="px-6 py-1 bg-foreground/20 rounded-lg">
-                                <Text className="text-background">Cancel</Text>
-                              </Pressable>
-                              <Pressable className="px-6 py-1 bg-ytheme rounded-lg">
-                                <Text onPress={()=>deletePlateFunction(index)} className="text-background">Submit</Text>
-                              </Pressable>
-                            </View>
-                          </View>
-                        )}
-                      </View>
-                    </Modal>
+              {role === 'user' && (
+                <View className="mb-4">
+                  <View className="flex flex-row justify-between mr-4">
+                    <Text className='font-extralight text-sm'>Plate No.</Text>
                   </View>
-                ))}
-                <View className="flex flex-row items-center">
-                  <TextInput 
-                    className="border-b border-foreground/20 text-foreground w-full"
-                    placeholder="---"
-                    placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
-                    value={newPlate}
-                    onChangeText={setNewPlate}
-                  />
-                  <Pressable className="bg-background p-2 absolute right-0" onPress={()=>{
-                    if (newPlate.trim() === "") return;
-                    setPlate([...plate, newPlate]);
-                    setNewPlate("");
-                  }}>
-                    <View>
-                      <PlusCircle 
-                        size={28}
-                        color={"#2ab42aff"}
-                      />
+                  {plate && plate.map((p,index)=>(
+                    <View key={index} className="mb-2">
+                      <View className="flex flex-row items-center">
+                        <Text>{p}</Text>
+                        <Pressable onPress={handleDeletePlateNo} className="absolute right-0 p-2">
+                          <View >
+                            <XCircle 
+                              size={28}
+                              color={"#da1f1fff"}
+                            />
+                          </View>
+                        </Pressable>
+                      </View>
+                      <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={deletePlateNo}
+                      >
+                        <View className="flex-1 justify-center items-center bg-foreground/20 p-4">
+                          {loading && (
+                            <ActivityIndicator size={50} />
+                          )}
+                          {!loading && (
+                            <View className="p-4 rounded-lg bg-background border border-ytheme">
+                              <Text className="text-lg">Delete Plate No.</Text>
+                              <Text className="text-sm font-light">Are you sure you want to delete plate no.?</Text>
+                              <View className="flex flex-row justify-evenly my-4">
+                                <Pressable onPress={()=>setDeletePlateNo(false)} className="px-6 py-1 bg-foreground/20 rounded-lg">
+                                  <Text className="text-background">Cancel</Text>
+                                </Pressable>
+                                <Pressable className="px-6 py-1 bg-ytheme rounded-lg">
+                                  <Text onPress={()=>deletePlateFunction(index)} className="text-background">Submit</Text>
+                                </Pressable>
+                              </View>
+                            </View>
+                          )}
+                        </View>
+                      </Modal>
                     </View>
-                  </Pressable>
+                  ))}
+                  <View className="flex flex-row items-center">
+                    <TextInput 
+                      className="border-b border-foreground/20 text-foreground w-full"
+                      placeholder="---"
+                      placeholderTextColor={colorScheme === 'dark' ? THEME.dark.border : THEME.light.border}
+                      value={newPlate}
+                      onChangeText={setNewPlate}
+                    />
+                    <Pressable className="bg-background p-2 absolute right-0" onPress={()=>{
+                      if (newPlate.trim() === "") return;
+                      setPlate([...plate, newPlate]);
+                      setNewPlate("");
+                    }}>
+                      <View>
+                        <PlusCircle 
+                          size={28}
+                          color={"#2ab42aff"}
+                        />
+                      </View>
+                    </Pressable>
+                  </View>
                 </View>
-              </View>
+              )}
               
 
               <Pressable onPress={()=>setChangesModal(true)} className="px-4 py-2 mb-6 bg-ytheme self-end rounded-lg">

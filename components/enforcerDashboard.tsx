@@ -8,11 +8,12 @@ import { useColorScheme } from 'nativewind';
 import { THEME } from '@/lib/theme';
 import { useAuth } from '@/hooks/useUserRole';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import { router } from 'expo-router';
 import Skeletonbox from './skeleton/skeletonbox';
 import Skeletontext from './skeleton/skeletontext';
 import SkeletonDashboard from './skeletonDashboard';
+import { useAppRefresh } from '@/hooks/refreshcontext';
 
 export default function EnforcerDashboard(){
 
@@ -20,6 +21,7 @@ export default function EnforcerDashboard(){
 
 	const { user } = useAuth();
 
+	const { setIsRefreshing, isRefreshing ,refreshFlag ,triggerRefresh } = useAppRefresh();
 	const [tickets, setTickets] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -28,12 +30,20 @@ export default function EnforcerDashboard(){
 
 		const fetchTickets = async () => {
 			try {
-				const q = query(collection(db, "tickets"), where("enforcerId", "==", user.uid));
+				const q = query(
+					collection(db, "tickets"),
+					where("enforcerId", "==", user.uid),
+					orderBy("dateIssued", "desc"), // ✅ latest first
+					limit(4) // ✅ only 4 tickets
+				);
+
 				const querySnapshot = await getDocs(q);
+
 				const userTickets = querySnapshot.docs.map(doc => ({
 					id: doc.id,
 					...doc.data()
 				}));
+
 				setTickets(userTickets);
 			} catch (error) {
 				console.error("Error fetching tickets:", error);
@@ -43,7 +53,7 @@ export default function EnforcerDashboard(){
 		};
 
 		fetchTickets();
-	}, [user]);
+	}, [user,refreshFlag]);
 
 	return(
 		<>

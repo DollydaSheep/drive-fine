@@ -220,25 +220,27 @@ export default function AboutScreen(){
                 <Text className='text-foreground text-lg'>{profileData?.phone ? `${profileData.phone}` : '---'}</Text>
               </View>
 
-              <View>
-                <View className="flex flex-row justify-between mr-4">
-                  <Text className='font-extralight text-sm'>Plate No.</Text>
-                  <Pencil 
-                    size={16}
-                    color={THEME.light.border}
-                  />
+              {profileData?.role === 'user' && (
+                <View>
+                  <View className="flex flex-row justify-between mr-4">
+                    <Text className='font-extralight text-sm'>Plate No.</Text>
+                    <Pencil 
+                      size={16}
+                      color={THEME.light.border}
+                    />
+                  </View>
+                  {/* <Text className='text-foreground text-lg'>{profileData?.plate ? profileData?.plate : '---'}</Text> */}
+                  {Array.isArray(profileData?.plate) && profileData.plate.length > 0 ? (
+                    profileData.plate.map((p: string, index: number) => (
+                      <Text key={index} className="text-foreground text-lg">
+                        {p}
+                      </Text>
+                    ))
+                  ) : (
+                    <Text className="text-foreground text-lg">---</Text>
+                  )}
                 </View>
-                {/* <Text className='text-foreground text-lg'>{profileData?.plate ? profileData?.plate : '---'}</Text> */}
-                {Array.isArray(profileData?.plate) && profileData.plate.length > 0 ? (
-                  profileData.plate.map((p: string, index: number) => (
-                    <Text key={index} className="text-foreground text-lg">
-                      {p}
-                    </Text>
-                  ))
-                ) : (
-                  <Text className="text-foreground text-lg">---</Text>
-                )}
-              </View>
+              )}
 
             </View>
 

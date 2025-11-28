@@ -9,7 +9,7 @@ import { Link, router, Stack } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useUserRole';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import SkeletonDashboard from './skeletonDashboard';
 import { useAppRefresh } from '@/hooks/refreshcontext';
 
@@ -39,7 +39,7 @@ export default function UserDashboard() {
 
     const fetchTickets = async () => {
       try {
-        const q = query(collection(db, "tickets"), where("userId", "==", user.uid));
+        const q = query(collection(db, "tickets"), where("userId", "==", user.uid), orderBy("dateIssued","desc"), limit(4));
         const querySnapshot = await getDocs(q);
         const userTickets = querySnapshot.docs.map(doc => ({
           id: doc.id,
